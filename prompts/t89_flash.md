@@ -1,4 +1,4 @@
-# t89-devseek — [NATION+0x108] 静态读链追源 + table_9(NATION_T9)文法定型(重脚手架;前作探针资产在盘)
+# t89-flash-lane — [NATION+0x108] 静态读链追源 + table_9(NATION_T9)文法定型(重脚手架;前作探针资产在盘)
 
 你是受指挥官委派的子代理,**全新会话**。E127 已把 t85 遗留升级:table_9(NATION_T9,251 行,13B 头+变长体+12B identity 尾+9B 脚,严格闭包 31,956B)成立,但**条目文法 held_no_item_grammar**,且 [NATION+0x108] 集合是否就是 table_9 的 wire 家**未证**。t83(E126)已证 DATABASE 构造器把 t9 注册在 `db+0x60`(紧邻 nation `db+0x28`)。本任务用静态链一锤定音。
 

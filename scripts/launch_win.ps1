@@ -2,7 +2,7 @@
 .SYNOPSIS
   Windows PowerShell launcher for pi CLI lanes with closed stdin, timeout, and retry-on-throttle.
 .EXAMPLE
-  pwsh -File scripts/launch_win.ps1 -Task t96 -Provider openai-codex -Model gpt-6-luna -PromptFile prompts/t96_unicorn_all_tables.md -OutDir scratch/t96/out -MaxAttempts 4 -TimeoutSec 1800
+  pwsh -File scripts/launch_win.ps1 -Task t96 -Provider $env:FMDB_GPT_PROVIDER -Model gpt-6-luna -PromptFile prompts/t96_unicorn_all_tables.md -OutDir scratch/t96/out -MaxAttempts 4 -TimeoutSec 1800
 #>
 param(
     [Parameter(Mandatory)][string]$Task,
@@ -20,7 +20,7 @@ Set-Location "D:\tmp2b\fm24-db"
 New-Item -ItemType Directory -Force -Path $OutDir, "scratch/t02/pi-logs", "scratch/t02/pi-sessions" | Out-Null
 
 if (-not $Thinking) {
-    $Thinking = if ($Provider -eq "openai-codex") { "high" } else { "max" }
+    $Thinking = if ($Model -match "^gpt-") { "high" } else { "max" }
 }
 
 $logFile = "scratch/t02/pi-logs/$Task.log"
@@ -43,7 +43,7 @@ function Test-LaneDone([string]$dir) {
 
 for ($i = 1; $i -le $MaxAttempts; $i++) {
     $ts = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    "=== attempt $i/$MaxAttempts $ts provider=$Provider model=$Model thinking=$Thinking ===" | Add-Content -Encoding UTF8 $logFile
+    "=== attempt $i/$MaxAttempts $ts model=$Model thinking=$Thinking ===" | Add-Content -Encoding UTF8 $logFile
     "" | Set-Content -Encoding UTF8 $attFile
 
     # Run pi in child process with stdin redirected from NUL so it never hangs on stdin

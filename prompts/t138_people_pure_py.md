@@ -1,4 +1,4 @@
-# t138 (ZCode GLM-5.3-Flash): Pure-Python Full 400 MB `people_db.dat` Decoder (Aim for All 658,011 Rows!)
+# t138 (AgentRpc GLM-5.3-Flash): Pure-Python Full 400 MB `people_db.dat` Decoder (Aim for All 658,011 Rows!)
 
 You are working in `D:\tmp2b\fm24-db`. Do NOT modify `reports/`, `scratch/t01/LEDGER.json`, or any other task's `scratch/tNN/` folder. Write ONLY to `scripts/t138_people_pure_py.py` and `scratch/t138/out/`.
 Use `sys.path.insert(0, r"D:\tmp2b\fm24\tools\python")` for `zstandard`. Keep `scratch/data/people_db.dat` and `D:\tmp2b\fm24\ida\editor_merge_v2.i64` strictly READ-ONLY (never write 400MB decompressed dumps to disk; decompress in memory).

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# run_single.sh — 单实体扫描:devseek,重试、增量落盘、断流可续。
+# run_single.sh — 单实体扫描:flash-lane,重试、增量落盘、断流可续。
 # usage: bash scripts/run_single.sh <TID> <TAG> <outdir> [max-retries]
 set -u
 cd /d/tmp2b/fm24-db || exit 1
@@ -29,9 +29,9 @@ PROMPT="$(cat prompts/t02s_template.md)
 for i in $(seq 1 "$MAX"); do
   echo "=== attempt $i/$MAX $(date) ===" >> "$LOG"
   : > "$ATT"
-  timeout 1200 pi --provider devseek --model deepseek-v4.1-flash-free \
+  timeout 1200 pi --provider "${FMDB_FLASH_PROVIDER:?Set FMDB_FLASH_PROVIDER}" --model "${FMDB_FLASH_MODEL:-deepseek-v4.1-flash}" \
       --thinking max --approve -p -n "$TASK" \
-      --session-dir scratch/t02/pi-sessions --session-id "${TASK}-devseek" \
+      --session-dir scratch/t02/pi-sessions --session-id "${TASK}-flash-lane" \
       -p "$PROMPT" \
       >> "$ATT" 2>&1
   RC=$?

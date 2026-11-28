@@ -11,13 +11,13 @@ LOG="scratch/t02/pi-logs/${TASK}.log"; ATT="scratch/t02/pi-logs/${TASK}.attempt.
 : > "$LOG"
 
 EXTRA=""
-case "$PROVIDER" in
-  openai-codex) EXTRA="--thinking high" ;;
+case "$MODEL" in
+  gpt-*) EXTRA="--thinking high" ;;
   *) EXTRA="--thinking max" ;;
 esac
 
 for i in $(seq 1 "$MAX"); do
-  echo "=== attempt $i/$MAX $(date) provider=$PROVIDER model=$MODEL ===" >> "$LOG"; : > "$ATT"
+  echo "=== attempt $i/$MAX $(date) model=$MODEL ===" >> "$LOG"; : > "$ATT"
   # -k 30: 超时后 SIGTERM 再给 30s,仍不退就 SIGKILL(node 子进程会无视 SIGTERM 僵死,t13e 首跑实证)
   timeout -k 30 "$TMO" pi --provider "$PROVIDER" --model "$MODEL" $EXTRA --approve -p \
     -n "$TASK" --session-dir scratch/t02/pi-sessions --session-id "${TASK}-${PROVIDER}" \

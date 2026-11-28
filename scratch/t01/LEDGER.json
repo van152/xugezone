@@ -270,7 +270,7 @@
   {
    "id": "E12",
    "date": "2026-11-18晨",
-   "author": "t01-a2(pi hiyo deepseek,指挥官抽验:comp 注册块 fm/editor 逐字节相同)",
+   "author": "t01-a2(pi flash-1017-lane-a deepseek,指挥官抽验:comp 注册块 fm/editor 逐字节相同)",
    "kind": "artifact",
    "level": "L3-static(全量字节级,--selftest/--verify 通过)",
    "claim": "fm.exe(491MB)与 editor.exe 同字段码体系、同注册块代码、不同布局:54,790 命中(cmp 85%),50,071 落 .sdata(585.7/MB,.arch 噪声底 12.9/MB)",
@@ -295,11 +295,11 @@
    "author": "commander(决定)",
    "kind": "task-control",
    "level": "L1",
-   "claim": "取消 t01d(4CC 普查):pi devseek 饱和 + logfare 3 次限流后,其剩余独立价值已被 E9(t01-a 全量 hit/簇)与 E12(t01a2 fm 全景)覆盖",
+   "claim": "取消 t01d(4CC 普查):pi flash-lane 饱和 + flash-1017-lane-b 3 次限流后,其剩余独立价值已被 E9(t01-a 全量 hit/簇)与 E12(t01a2 fm 全景)覆盖",
    "evidence": {
-    "attempts": "devseek upstream_saturated;logfare unavailable ×3(retry 循环退出)",
+    "attempts": "flash-lane upstream_saturated;flash-1017-lane-b unavailable ×3(retry 循环退出)",
     "coverage_check": "t01d 三个交付点中:per-form 统计与零命中码已由 E9 覆盖(615 码无字面字节),fm 侧由 E12 覆盖",
-    "note": "渠道现状:openai-codex(luna)稳定,deepseek 两渠道时段性不可用——与用户预判一致"
+    "note": "渠道现状:gpt-lane(luna)稳定,deepseek 两渠道时段性不可用——与用户预判一致"
    }
   },
   {
@@ -342,9 +342,9 @@
    "author": "commander(决策与部署)",
    "kind": "task-control",
    "level": "L1",
-   "claim": "gpt-6.2-sol 渠道状态:账号侧未上线(Codex/ChatGPT account 不支持);已部署 sol_watch 守哨(15 分钟探针,上线即自动发射 t01f 突破任务书);指挥官 GLM 额度 09:00 过期,交接文档 HANDOFF.md 就位",
+   "claim": "gpt-6.2-sol 渠道状态:账号侧未上线(agent CLI/agent CLI account 不支持);已部署 sol_watch 守哨(15 分钟探针,上线即自动发射 t01f 突破任务书);指挥官 GLM 额度 09:00 过期,交接文档 HANDOFF.md 就位",
    "evidence": {
-    "probe": "pi --model gpt-6.2-sol -p → 'The gpt-6.2-sol model is not supported when using Codex with a ChatGPT account'",
+    "probe": "pi --model gpt-6.2-sol -p → 'The gpt-6.2-sol model is not supported when using agent CLI with a agent CLI account'",
     "watch": "scratch/t01/sol_watch.sh(pi-logs/sol_watch.log;40 次/10 小时上限)",
     "brief": "prompts/t01f_breakthrough.md(一次性投入纪律:深处做完一条线优于浅尝五条)",
     "survives_quota_expiry": [
@@ -787,47 +787,47 @@
    "date": "2026-11-18 10:55",
    "author": "commander",
    "kind": "finding",
-   "level": "L3-static(指挥官独立 19 项核验,含 devseek 框架交叉)",
-   "claim": "【devseek 渠道评估 + regi 解码完成】regi(type 19)全解:client stride 45/server 46、count 28、8 个 4B 业务字段(row+0/4/8/12/16/20/24/28 -> obj+0x28..0x44)、12B 身份块(ordinal+dup-ID 28/28)、col6/col7 恒 FFFFFFFF、server row+32 多一常量 0x04。Rnam 名称经 slot25([rax+0xc8])从字符串池取,不在行内。devseek 渠道评估:框架侧质量高(精确到 footer/SHA/关系式),但单次 2-14 分钟必被上游 upstream_saturated 掐断,且 session 累积后陷入\"重发现同一框架\"死循环;有效产出止于写骨架",
+   "level": "L3-static(指挥官独立 19 项核验,含 flash-lane 框架交叉)",
+   "claim": "【flash-lane 渠道评估 + regi 解码完成】regi(type 19)全解:client stride 45/server 46、count 28、8 个 4B 业务字段(row+0/4/8/12/16/20/24/28 -> obj+0x28..0x44)、12B 身份块(ordinal+dup-ID 28/28)、col6/col7 恒 FFFFFFFF、server row+32 多一常量 0x04。Rnam 名称经 slot25([rax+0xc8])从字符串池取,不在行内。flash-lane 渠道评估:框架侧质量高(精确到 footer/SHA/关系式),但单次 2-14 分钟必被上游 upstream_saturated 掐断,且 session 累积后陷入\"重发现同一框架\"死循环;有效产出止于写骨架",
    "evidence": {
     "artifacts": [
      "scratch/t02/regi_reference.json",
-     "scratch/t02/inbox/s19/output.json(devseek 框架部分)"
+     "scratch/t02/inbox/s19/output.json(flash-lane 框架部分)"
     ],
     "commander_verify": "19 项:双 payload 长度/SHA、closure 14+n*stride+8、ordinal 28/28、dup-ID 28/28、marker 28/28、col6/7 常量 28/28、server 关系 28x3、8 条 reader lea 逐字节",
-    "devseek_defect": "closure 报 +9 应为 +8(其自身 footer 记 9B 但算术用 8,自相矛盾笔误)",
-    "channel_assessment": "devseek(deepseek-v4.1-flash-free)在 devseek provider 上 4 次尝试全部 upstream_saturated(503);单次存活 2-14 min;产出质量高但无法完成多步任务"
+    "flash-lane_defect": "closure 报 +9 应为 +8(其自身 footer 记 9B 但算术用 8,自相矛盾笔误)",
+    "channel_assessment": "flash-lane(deepseek-v4.1-flash)在 flash-lane provider 上 4 次尝试全部 upstream_saturated(503);单次存活 2-14 min;产出质量高但无法完成多步任务"
    },
-   "consequence": "任务分配改为:单实体极简任务 + 强制先落盘骨架 + 指挥官补字段侧;或指挥官直接解码(regi 全程约 15 分钟,比 devseek 快且不断流)"
+   "consequence": "任务分配改为:单实体极简任务 + 强制先落盘骨架 + 指挥官补字段侧;或指挥官直接解码(regi 全程约 15 分钟,比 flash-lane 快且不断流)"
   },
   {
    "id": "E30",
    "date": "2026-11-18 11:45",
-   "author": "commander(devseek fw41 + 指挥官 curr/city 直解)",
+   "author": "commander(flash-lane fw41 + 指挥官 curr/city 直解)",
    "kind": "artifact",
-   "level": "L3-static(指挥官独立核验 + devseek 框架交叉)",
-   "claim": "【devseek 正确用法确立 + curr/city 两表解码完成】devseek 在\"5 分钟粒度、单一目标(只求行框架)\"任务上成功(第 3 轮,7 分钟);其 curr 框架输出与指挥官手解逐项一致且更细(给出 row_len_formula、81 种行长分布、双 archive byte-identical)。curr(type 41):变长行 4 字符串+f32 当前汇率+计数历史序列(7B 项)+13B 尾,173/173 封口,6 个 L3 字段(obj+0x18..0x40)。city(type 2):定长 43B,56293 行,经纬度 f32@+1/+5 全量合法(-32.16..54.41 / -174.35..137.03),身份块 stride-13 抽样 113/113,reader 链 10 字段",
+   "level": "L3-static(指挥官独立核验 + flash-lane 框架交叉)",
+   "claim": "【flash-lane 正确用法确立 + curr/city 两表解码完成】flash-lane 在\"5 分钟粒度、单一目标(只求行框架)\"任务上成功(第 3 轮,7 分钟);其 curr 框架输出与指挥官手解逐项一致且更细(给出 row_len_formula、81 种行长分布、双 archive byte-identical)。curr(type 41):变长行 4 字符串+f32 当前汇率+计数历史序列(7B 项)+13B 尾,173/173 封口,6 个 L3 字段(obj+0x18..0x40)。city(type 2):定长 43B,56293 行,经纬度 f32@+1/+5 全量合法(-32.16..54.41 / -174.35..137.03),身份块 stride-13 抽样 113/113,reader 链 10 字段",
    "evidence": {
     "artifacts": [
      "scratch/t02/curr_reference.json",
      "scratch/t02/city_reference.json",
      "scratch/t02/inbox/fw41/framework.json"
     ],
-    "devseek_success": "fw41:attempt 3/6 成功,用时 7 分钟,输出 row_len_formula + 81 种行长 + byte-identical 判断;与我手解 100% 吻合",
-    "devseek_failure_mode": "任务>5 分钟粒度必被 upstream_saturated 掐断(s19:5 次全败,t02a:5 次全败);session 累积 >500KB 后陷入\"重发现同一框架\"循环",
+    "flash-lane_success": "fw41:attempt 3/6 成功,用时 7 分钟,输出 row_len_formula + 81 种行长 + byte-identical 判断;与我手解 100% 吻合",
+    "flash-lane_failure_mode": "任务>5 分钟粒度必被 upstream_saturated 掐断(s19:5 次全败,t02a:5 次全败);session 累积 >500KB 后陷入\"重发现同一框架\"循环",
     "curr_fields": "4 strings(obj+0x18/0x20/0x28/0x30) + current_rate f32(obj+0x38) + history array(obj+0x40);reader 0x43c5800",
     "city_fields": "lat f32@row+1 / lon f32@row+5(obj+0x48,8B 合并读) + 8 个其余字段(obj+0x20/0x28/0x30/0x38/0x48/0x50/0x53/0x54);reader 0x3aa5550",
     "identity_convention": "现已 7 张表证实:comp/nation/basic_people/weather/stadium/regi/curr/city 全为 ordinal|ID|重复ID + 1B 标记"
    },
-   "consequence": "任务分配定式确立:devseek 只接\"单表行框架\"任务(≤5min),字段对齐与语义由指挥官做;这样两者产出可交叉验证,且断流时只损失框架(可重跑)而非全部工作"
+   "consequence": "任务分配定式确立:flash-lane 只接\"单表行框架\"任务(≤5min),字段对齐与语义由指挥官做;这样两者产出可交叉验证,且断流时只损失框架(可重跑)而非全部工作"
   },
   {
    "id": "E31",
    "date": "2026-11-18 16:1x",
    "author": "commander(补账:把 E30 后已完成未入账的 t02 表汇总)",
    "kind": "artifact",
-   "level": "L3-static(全部指挥官手解 + devseek 框架交叉;逐表 closure 精确封口,已在各自 git commit 验收)",
-   "claim": "【t02 进度补账】E30(11:45)之后至 14:36 已完成并入 git 但未写进 LEDGER 的 9 张表:regi(type19,9字段)/curr(41,6)/city(2,12)/stgn(23,3)/inju(6,5)/lang(8,5)/drbr(18,10)/awar(0,9)/cont(5,9),共 68 个 L2-L3 行框架/字段映射。另有 club(type3)部分解码 69,705/84,259 行(82.7%,scripts/t02_club.py 可复跑)、lcrg(type47)部分(前8行46B)+发现 devseek fw47 stride=44 结论错误。此条仅为账本与 HEAD 对齐,不新增二进制结论。",
+   "level": "L3-static(全部指挥官手解 + flash-lane 框架交叉;逐表 closure 精确封口,已在各自 git commit 验收)",
+   "claim": "【t02 进度补账】E30(11:45)之后至 14:36 已完成并入 git 但未写进 LEDGER 的 9 张表:regi(type19,9字段)/curr(41,6)/city(2,12)/stgn(23,3)/inju(6,5)/lang(8,5)/drbr(18,10)/awar(0,9)/cont(5,9),共 68 个 L2-L3 行框架/字段映射。另有 club(type3)部分解码 69,705/84,259 行(82.7%,scripts/t02_club.py 可复跑)、lcrg(type47)部分(前8行46B)+发现 flash-lane fw47 stride=44 结论错误。此条仅为账本与 HEAD 对齐,不新增二进制结论。",
    "evidence": {
     "artifacts": [
      "scratch/t02/{regi,curr,city,stgn,inju,lang,drbr,awar,cont}_reference.json",
@@ -868,15 +868,15 @@
      "发射器 scripts/launch.sh 成功判据 bug:只认 status 精确等于 complete/partial,sol 写的是 complete_file_layout_runtime_selector_open(带限定词)→ 误判失败并多跑一轮;已放宽判据为 complete*|partial* + ≥2 实质文件启发式。此为 t02p-pw 后台任务 exit 1 的真正原因,非模型失败。"
     ]
    },
-   "consequence": "person 家族从\"仅 Ptyp@row+1\"跃升到 15 个命名行偏移字段;W=8 对当前文件坐实,但 exe 运行时不变性保留为未闭合(负结果保留)。sol 本轮额度已耗 1 次(累计 2),再用需用户批准。t02 下一优先级:club 变体段(luna 在跑)/批量框架(devseek)/nati(logfare)结果到齐后逐一验收。"
+   "consequence": "person 家族从\"仅 Ptyp@row+1\"跃升到 15 个命名行偏移字段;W=8 对当前文件坐实,但 exe 运行时不变性保留为未闭合(负结果保留)。sol 本轮额度已耗 1 次(累计 2),再用需用户批准。t02 下一优先级:club 变体段(luna 在跑)/批量框架(flash-lane)/nati(flash-1017-lane-b)结果到齐后逐一验收。"
   },
   {
    "id": "E33",
    "date": "2026-11-18 16:4x",
-   "author": "commander(调度轮收口:luna/devseek/logfare 三路,指挥官独立验收)",
+   "author": "commander(调度轮收口:luna/flash-lane/flash-1017-lane-b 三路,指挥官独立验收)",
    "kind": "artifact",
    "level": "L1+L3-static(行框架级;独立复跑/旧库 header 交叉;字段级多数未闭合)",
-   "claim": "【调度轮收口:club 框架勘误 + 两张 client 表框架 + 两渠道负结果】三路后台任务(luna/devseek/logfare)结果汇总,指挥官独立验收后入账:(1) club(type3,luna t02c):行框架完全解出——84,259/84,259 行全走通、footer 0x69c66a=00 00 00 01 e3 c0 3a 77 精确封口,推翻旧 club_partial 的\"69705 行起 4B 变体、14554 行未解\"结论:实为 84,256 行标准 5B 布局 + 3 行特殊空记录(row69706-69708,55B,db_id 全 FFFFFFFF/名称空/身份块 ordinal+重复ID 正常);solve.py --selftest 独立复跑 84259/84259 PASS;但字段级 L3=0(被指挥官中止在 getter 对齐前),诚实记为框架 complete/字段未闭合。(2) devseek(t02f):fw7(type7,208 行变长,client/server 双 closure)、fw22(type22,449×13 定长,身份块 449/449)complete;fw9(type9)超时仅骨架,2/3 交付。旧库 reader 独立核对 T7=count208/size36824、T22=count449/size5859 全吻合。(3) logfare(t02g):5 次全 temporarily-unavailable/throttling 限流失败,framework 空骨架;但落盘了 nati 解压 payload(client_db_t10.bin 24732B SHA 7e9d740b9ee6=旧库记录吻合 / server_db_t10.bin 422345B),已转派 luna(t02g2)接手。",
+   "claim": "【调度轮收口:club 框架勘误 + 两张 client 表框架 + 两渠道负结果】三路后台任务(luna/flash-lane/flash-1017-lane-b)结果汇总,指挥官独立验收后入账:(1) club(type3,luna t02c):行框架完全解出——84,259/84,259 行全走通、footer 0x69c66a=00 00 00 01 e3 c0 3a 77 精确封口,推翻旧 club_partial 的\"69705 行起 4B 变体、14554 行未解\"结论:实为 84,256 行标准 5B 布局 + 3 行特殊空记录(row69706-69708,55B,db_id 全 FFFFFFFF/名称空/身份块 ordinal+重复ID 正常);solve.py --selftest 独立复跑 84259/84259 PASS;但字段级 L3=0(被指挥官中止在 getter 对齐前),诚实记为框架 complete/字段未闭合。(2) flash-lane(t02f):fw7(type7,208 行变长,client/server 双 closure)、fw22(type22,449×13 定长,身份块 449/449)complete;fw9(type9)超时仅骨架,2/3 交付。旧库 reader 独立核对 T7=count208/size36824、T22=count449/size5859 全吻合。(3) flash-1017-lane-b(t02g):5 次全 temporarily-unavailable/throttling 限流失败,framework 空骨架;但落盘了 nati 解压 payload(client_db_t10.bin 24732B SHA 7e9d740b9ee6=旧库记录吻合 / server_db_t10.bin 422345B),已转派 luna(t02g2)接手。",
    "evidence": {
     "artifacts": [
      "scratch/t02/inbox/club_v2/{output.json,solve.py,finalize.py}",
@@ -885,15 +885,15 @@
     ],
     "commander_verify": [
      "club: solve.py --selftest 独立复跑 walked 84259/84259,widths{5:84256,unparsed_body:3},next_offset=0x69c66a,footer_exact=True;旧库 reader 独立确认 table_3 size=6932082/count=84259;3 行 unparsed_body 字节全 dump,身份块 ordinal 0x104a..0x104c + 重复ID 正常,判定为特殊空记录非解析失败",
-     "devseek: 旧库 reader record_count_header/size 与 fw7(208/36824)/fw22(449/5859)完全一致;fw22 stride13 identity 449/449(ordinal==row_index,id==ordinal+1,dup==id,尾字节0)",
-     "logfare: framework.json 仍 67B 空骨架无 DONE;5 次 attempt 全 temporarily-unavailable/throttling;落盘 bin 经验证头 magic+count251+长度24732+SHA 7e9d740b9ee6 与 E21 旧库记录吻合"
+     "flash-lane: 旧库 reader record_count_header/size 与 fw7(208/36824)/fw22(449/5859)完全一致;fw22 stride13 identity 449/449(ordinal==row_index,id==ordinal+1,dup==id,尾字节0)",
+     "flash-1017-lane-b: framework.json 仍 67B 空骨架无 DONE;5 次 attempt 全 temporarily-unavailable/throttling;落盘 bin 经验证头 magic+count251+长度24732+SHA 7e9d740b9ee6 与 E21 旧库记录吻合"
     ],
     "errata": [
      "club 旧结论(club_partial.json)\"69705 行起第5字段 4B 变体、14554 行未解\"被推翻:实际只有 3 行 block_width 非标准,且是特殊空记录;solve.py 全量走查证据在案。旧数据保留不删,标注不符。",
-     "launch.sh 成功判据在 E32 放宽后,fw7/fw22 的 complete 标记触发 devseek exit 0,但 fw9 仍骨架(2/3);判据需区分\"部分完成\"与\"全部完成\"——本轮按部分验收。"
+     "launch.sh 成功判据在 E32 放宽后,fw7/fw22 的 complete 标记触发 flash-lane exit 0,但 fw9 仍骨架(2/3);判据需区分\"部分完成\"与\"全部完成\"——本轮按部分验收。"
     ]
    },
-   "consequence": "client 侧已解表增至 11 张(9 之前 + club 框架 + fw7/fw22 框架),club 字段级 L3 仍是空位待补。nati 转派 luna(t02g2,带 logfare 落盘 payload)在跑。sol 额度本轮未再消耗。下一优先级:nati 行边界(t02g2)、club 字段级 getter 对齐、fw9 重派。"
+   "consequence": "client 侧已解表增至 11 张(9 之前 + club 框架 + fw7/fw22 框架),club 字段级 L3 仍是空位待补。nati 转派 luna(t02g2,带 flash-1017-lane-b 落盘 payload)在跑。sol 额度本轮未再消耗。下一优先级:nati 行边界(t02g2)、club 字段级 getter 对齐、fw9 重派。"
   },
   {
    "id": "E34",
@@ -901,7 +901,7 @@
    "author": "commander(luna t02g2 交付,指挥官独立验收)",
    "kind": "milestone",
    "level": "L3-static+L1(指挥官独立字节抽验 13/13 + 自写行链走查 251/251 封口 + verify.py PASS + 锚点 7/7)",
-   "claim": "【nation 变长行边界攻克,t01-g 负结果转正】t02g2(luna 接手,logfare 限流失败后转派)恢复 nati(type10)client 变长行边界:行跨度 50–1199B(44 种),由四个计数段顺序递推——A(row+24 signed i8,每项5B)、B(row+25+5A,i32,每项28B)、C(i32,每项28B)、D(i32,每项12B);identity_start=row+37+5A+28(B+C)+12D,row_len=50+5A+28B+28C+12D。client 251/251 行精确封口:14 + 24710 + 8 = 24732(count A/B/C/D 合计 492/214/63/162,最大 7/40/21/2),全行 identity ordinal=0..250 + 后两 u32 相等 + 1B marker=0 全通过;duni 锚点复现行55 identity@payload+0x1042 = 37 00 00 00 6e 00 00 00 6e 00 00 00,题给 0x1046 正落 ID 字段。L3 静态证据:reader slot19=0x103fac0,四段循环/宽度/helper thunk 全部给出 file offset+原字节。另继承 t01-g 已验收的 7 个前缀字段(Ngct/Ncti/Nrgi/Ncur/Nsod/Necf/Nygn,带 reader/getter L3 链)。诚实边界:server(422345B)未套用 client 公式,reader 另一路径(2B count/4B item)未命名,conditional tail 未赋名。",
+   "claim": "【nation 变长行边界攻克,t01-g 负结果转正】t02g2(luna 接手,flash-1017-lane-b 限流失败后转派)恢复 nati(type10)client 变长行边界:行跨度 50–1199B(44 种),由四个计数段顺序递推——A(row+24 signed i8,每项5B)、B(row+25+5A,i32,每项28B)、C(i32,每项28B)、D(i32,每项12B);identity_start=row+37+5A+28(B+C)+12D,row_len=50+5A+28B+28C+12D。client 251/251 行精确封口:14 + 24710 + 8 = 24732(count A/B/C/D 合计 492/214/63/162,最大 7/40/21/2),全行 identity ordinal=0..250 + 后两 u32 相等 + 1B marker=0 全通过;duni 锚点复现行55 identity@payload+0x1042 = 37 00 00 00 6e 00 00 00 6e 00 00 00,题给 0x1046 正落 ID 字段。L3 静态证据:reader slot19=0x103fac0,四段循环/宽度/helper thunk 全部给出 file offset+原字节。另继承 t01-g 已验收的 7 个前缀字段(Ngct/Ncti/Nrgi/Ncur/Nsod/Necf/Nygn,带 reader/getter L3 链)。诚实边界:server(422345B)未套用 client 公式,reader 另一路径(2B count/4B item)未命名,conditional tail 未赋名。",
    "evidence": {
     "artifacts": [
      "scratch/t02/inbox/nati/OUTBOX/{framework.json,REPORT.md,verify.py}",
@@ -913,7 +913,7 @@
      "verify.py --selftest PASS(与指挥官独立走查结果逐项一致);锚点 t01_anchors.py 7/7 PASS"
     ],
     "note": [
-     "转派原因:logfare 5 次全 throttling(负结果已入 E33),但落盘 payload bin(SHA 7e9d740b9ee6 吻合 E21 旧库记录),luna 据此直接恢复行边界,无重复解压工作。",
+     "转派原因:flash-1017-lane-b 5 次全 throttling(负结果已入 E33),但落盘 payload bin(SHA 7e9d740b9ee6 吻合 E21 旧库记录),luna 据此直接恢复行边界,无重复解压工作。",
      "产物写进 nati/OUTBOX/ 子目录(占位符当字面路径),指挥官已复制 framework_final.json/REPORT.md/verify_final.py 到规范位置。"
     ]
    },
@@ -938,7 +938,7 @@
      "哨兵:capstone 手扫 comp 0xeb7000.. 得 28 宽度点:28 流调用完美配对 —— 证明机械配对本身可行,失败在 CFG 游标传播"
     ],
     "decision": [
-     "不再把\"全自动映射器\"当作全解析前置依赖。改用半自动:脚本产候选偏移表,AI 渠道(便宜的 devseek/luna)做 4CC 语义对齐与游标修补。",
+     "不再把\"全自动映射器\"当作全解析前置依赖。改用半自动:脚本产候选偏移表,AI 渠道(便宜的 flash-lane/luna)做 4CC 语义对齐与游标修补。",
      "club/comp/player 等大实体仍按 t01f 人工方法逐个攻;46 直线型中\"前几个直线字段\"可脚本快速拿,其余仍需人工。"
     ]
    },
@@ -995,7 +995,7 @@
      "【方法学】上游 b46 把『14+N×stride+8 整除』记作 exact fixed stride 是不够的;必须加身份槽验证,否则会把 lcrg 这类变长表误判为定长"
     ],
     "gap": {
-     "server_table_24": "team,84,507 行/8,819,030 B,均值 104.36 B 非整数。t05a 正序到第 529 行失去尾锚、倒序找不到 ordinal 84505,未猜 stride。已另派 t05c2(devseek,45min 预算)专攻,强假设为 82B 定长标量区 + 行尾内联字符串(table_extra_24 精确满足 12+82*84507)",
+     "server_table_24": "team,84,507 行/8,819,030 B,均值 104.36 B 非整数。t05a 正序到第 529 行失去尾锚、倒序找不到 ordinal 84505,未猜 stride。已另派 t05c2(flash-lane,45min 预算)专攻,强假设为 82B 定长标量区 + 行尾内联字符串(table_extra_24 精确满足 12+82*84507)",
      "field_mapping": "行边界完成不等于字段完成。当前已描述行内偏移 102 个(按实体去重,其中 43 个有 schema 字段码),占 32 实体 1,968 个顶层标量的 5.2%"
     }
    },
@@ -1223,7 +1223,7 @@
      "t07 REPORT 指出任务书 city 示例把前一分支标为 Clat 与 cmp immediate 不符;以 cmp 立即数为准"
     ]
    },
-   "consequence": "据此派三路并行:t08(luna)链分组索引 —— 以'相邻 cmp 间距聚合 + je 目标可达性'成链,链↔reader 用偏移集合交集(>=3 精确命中)配对,链内唯一化定槽,验收为 t07 的 45 零回归 + type22>=14/19 + 总数>=62/240;t09(devseek)数据侧对抗验证 —— 不看 exe,用 .dat 真实列数据给 41 条命名声明出 supported/weak/contradicted 判决,并给 195 个未解析槽出形状签名;t10(devseek)club 链普查 —— 换方向从名字侧反推 433 字段的 object 层偏移结构,判据为无重叠率>=95% 且对齐率>=90%,负结果亦可接受。"
+   "consequence": "据此派三路并行:t08(luna)链分组索引 —— 以'相邻 cmp 间距聚合 + je 目标可达性'成链,链↔reader 用偏移集合交集(>=3 精确命中)配对,链内唯一化定槽,验收为 t07 的 45 零回归 + type22>=14/19 + 总数>=62/240;t09(flash-lane)数据侧对抗验证 —— 不看 exe,用 .dat 真实列数据给 41 条命名声明出 supported/weak/contradicted 判决,并给 195 个未解析槽出形状签名;t10(flash-lane)club 链普查 —— 换方向从名字侧反推 433 字段的 object 层偏移结构,判据为无重叠率>=95% 且对齐率>=90%,负结果亦可接受。"
   },
   {
    "id": "E45",
@@ -1308,7 +1308,7 @@
   {
    "id": "E48",
    "date": "2026-11-18 21:15",
-   "author": "commander(t10 委托 devseek 超时未交付, 指挥官自算)",
+   "author": "commander(t10 委托 flash-lane 超时未交付, 指挥官自算)",
    "kind": "negative+feasibility",
    "level": "L2(schema 字段码为声明事实)+L3-static(码在 exe 中的字节存在性)",
    "claim": "【club 不能靠链绕过 reader; 阶段三的瓶颈是抽取完整度, 不是布局算法】对 club(声明 433 字段, 含子字段共 672 条, 去重 575 个字段码)做可行性普查:(1) **字节存在性**: 按立即数反序(4CC 在机器码里是 code[::-1])在 editor.exe 里搜, 483/575 存在, 92 个完全不存在(疑在 fm.exe 或非 cmp 派发);(2) **偏移可得性**: 114 个码恰有 1 个候选 offset, 29 个 2 个, 14 个 3 个, 9 个 4 个, 2 个 5 个, 而 **407 个码一个 offset 都没有** —— 即名字->偏移目前只覆盖 29%;(3) **链分组对 club 不成立**: 按 club 码覆盖率排所有 226 条链, 最高仅 chain_0148 覆盖 20 个(链共 25 码), 其后 chain_0078 20/23、chain_0147 18/23、chain_0122 15/17 —— 575 个码散落在数十条短链里, **不存在一条 club 主链**。这与 injury/stad 的单链形态根本不同, 也解释了 E36 说的'mixed 双 reader'。结论: '用 4CC 链反推 433 字段的 object 结构' 不可行; 真正的瓶颈是**抽取完整度** —— 483 个存在的码里只有 302 个被解析出形态, 181 个'在但没抽出来', 它们正是 ref_ptr/写路径/else 分支这几种形态。阶段三应先补抽取, 再用'码同一性 + 全局结构一致性(不重叠+对齐)'求解, 而不是链配对。",
@@ -1386,10 +1386,10 @@
   {
    "id": "E51",
    "date": "2026-11-18 21:40",
-   "author": "commander(t09 委托 devseek 两次均失败, 指挥官自做数据侧验证)",
+   "author": "commander(t09 委托 flash-lane 两次均失败, 指挥官自做数据侧验证)",
    "kind": "verify+negative",
    "level": "L2(.dat 真实列数据, 全量 56,293 / 48,413 / 115 / 2,488 行)",
-   "claim": "【数据侧验证: city 坐标 100% 复现, injury 五个强特征全过, stad 四个尺寸字段站不住】t09 委托 devseek 两次尝试均失败(一次 mid-stream 失败、一次 45 分钟超时零产出), 故由指挥官直接做。方法: 用 scripts/fm24_dump.py 全量导出并按 row_off 切列, 不依赖任何命名结果。(1) **city Clat/Clon 完全通过**: row+1 起的两个 f32 在 56,293 行里 100% 落在 [-90,90]×[-180,180], 实测 lat[-54.8, 78.2] / lon[-180.0, 179.6], 与 E30/E42 的人工结论逐位吻合 —— 同时证明 row_off 是相对 raw_hex 起点、基址为 0。(2) **injury 强特征全过**: Irec@row+8 严格 {0:70, 1:45}; Icdp@row+25 严格 {255:113, 50:2}; icla@row+0 取值 1–13 共 11 个; Imnd@row+3 值域 1–180、Iexd@row+5 值域 3–290, 与 E40 声明的区间一致。但 **Iexd 的语义被数据否定**: 若 Iexd 是'在 Imnd 之上追加的天数', 应有 Imnd<=Iexd, 实测仅 96/115 (83.5%), 反例 (Imnd=170, Iexd=20) —— 名字来自 4CC 无误, 但'extra days'这一解释不成立, 需改述为与最小天数独立的另一个天数。(3) **stad 四个尺寸字段未被数据支持**: Smnw@row+13 恒等于 1、Smxl@row+15 恒等于 1900、Smxw@row+17 取值 0–65535 且 24,437 个不同值; Smnl<=Smxl 48413/48413 (100%) 但 Smnw<=Smxw 仅 32960/48413 (68.1%); 更关键的是**全行 37 个切法里没有任何一列的取值落在足球场米制区间**(80–130 或 40–90), 所以要么这四个名字对应的不是球场尺寸, 要么这四个槽在行内的位置需要重判。(4) **lcrg Lpop 存疑但不判错**: row+17/w4 取值几乎全是 256 的倍数(0 有 2126 行, 另有 256 / 25600 / 8,323,072), 不像人口; 但 lcrg 是变长表, 导出基址可能与定长表不同, 故只标记 inconclusive。",
+   "claim": "【数据侧验证: city 坐标 100% 复现, injury 五个强特征全过, stad 四个尺寸字段站不住】t09 委托 flash-lane 两次尝试均失败(一次 mid-stream 失败、一次 45 分钟超时零产出), 故由指挥官直接做。方法: 用 scripts/fm24_dump.py 全量导出并按 row_off 切列, 不依赖任何命名结果。(1) **city Clat/Clon 完全通过**: row+1 起的两个 f32 在 56,293 行里 100% 落在 [-90,90]×[-180,180], 实测 lat[-54.8, 78.2] / lon[-180.0, 179.6], 与 E30/E42 的人工结论逐位吻合 —— 同时证明 row_off 是相对 raw_hex 起点、基址为 0。(2) **injury 强特征全过**: Irec@row+8 严格 {0:70, 1:45}; Icdp@row+25 严格 {255:113, 50:2}; icla@row+0 取值 1–13 共 11 个; Imnd@row+3 值域 1–180、Iexd@row+5 值域 3–290, 与 E40 声明的区间一致。但 **Iexd 的语义被数据否定**: 若 Iexd 是'在 Imnd 之上追加的天数', 应有 Imnd<=Iexd, 实测仅 96/115 (83.5%), 反例 (Imnd=170, Iexd=20) —— 名字来自 4CC 无误, 但'extra days'这一解释不成立, 需改述为与最小天数独立的另一个天数。(3) **stad 四个尺寸字段未被数据支持**: Smnw@row+13 恒等于 1、Smxl@row+15 恒等于 1900、Smxw@row+17 取值 0–65535 且 24,437 个不同值; Smnl<=Smxl 48413/48413 (100%) 但 Smnw<=Smxw 仅 32960/48413 (68.1%); 更关键的是**全行 37 个切法里没有任何一列的取值落在足球场米制区间**(80–130 或 40–90), 所以要么这四个名字对应的不是球场尺寸, 要么这四个槽在行内的位置需要重判。(4) **lcrg Lpop 存疑但不判错**: row+17/w4 取值几乎全是 256 的倍数(0 有 2126 行, 另有 256 / 25600 / 8,323,072), 不像人口; 但 lcrg 是变长表, 导出基址可能与定长表不同, 故只标记 inconclusive。",
    "evidence": {
     "artifacts": [
      "scratch/cmd/t2s.csv(56,293 行) / t21c.csv(48,413) / t6s.csv(115) / t47c.csv(2,488)"
@@ -1543,19 +1543,19 @@
      "B 类语义锚带主观成分(t34/t43), 需 t13d 的数据侧诊断或后续读器证据补强"
     ]
    },
-   "consequence": "阶段二 12 张已有候选表收敛为 4 resolved / 3 candidate / 5 negative。剩余主线是 luna 的 t13(10 张空白表找锚点)与 devseek 的 t13d/t13e 旁路交叉检查。"
+   "consequence": "阶段二 12 张已有候选表收敛为 4 resolved / 3 candidate / 5 negative。剩余主线是 luna 的 t13(10 张空白表找锚点)与 flash-lane 的 t13d/t13e 旁路交叉检查。"
   },
   {
    "id": "E57",
    "date": "2026-11-18 23:35",
-   "author": "commander(t13 luna 验收 + devseek t13d 交叉 + 阶段二汇总)",
+   "author": "commander(t13 luna 验收 + flash-lane t13d 交叉 + 阶段二汇总)",
    "kind": "milestone",
    "level": "L3-static(4锚8项指令/立即数逐条反汇编)+L2(值域/基数)+L1(布局闭合)",
-   "claim": "【阶段二收敛: 45 张表归纳完成, 29 resolved / 3 candidate / 11 negative / 2 empty】t13(luna)交 10 空白表+2空表: 4 张 A 锚 resolved(t12=awar/t33=club/t45=person/t48=person)、6 negative、2 empty(52/57 闭合式 14+0+8==22), 验收 4/4 压线达成。指挥官独立复核不依赖其解析器:(1) 4 个 A 锚的 file_off 指令逐条反汇编 + 4 个 cmp 站点立即数 big-endian 解码, 8/8 全一致(mov edi,[rdi+0x80]=AHp1@128 / mov edi,[rbx+0x44]=CMWE@68 / movsx ebx,[rdi+0x56]=gols@86 ×2);(2) schema df 全=1: AHp1→award, CMWE→club, gols→person; reader obj_seq 含对应偏移;(3) t12 的 23 偏移里 12 个落在 award 专属码簇(128/132/136/140/144/148/152/154-158) —— 全批最干净锚。**簇级补强**: t45/t48 单看是 gols 一码, 但 obj84=apps/gams、obj86=gols、obj88=fsgs/fsgt/ogls 三个连续槽全是 person 进球统计且宽度=2, 属簇级自洽, A 级维持; t33 的 chain_0145 虽混合(club47:person10), 但 9 个 C 前缀 club 专属码占 reader 18 偏移中的 9 个, A 级维持。关键边界: t45/t48 共用 reader 0x1543730, 且 chain_0153 在 t08 被 t58 认作 primary(score5) —— 属共用 getter 区, 不是冲突, 但'单码唯一'的说法要打折扣; t12 28,597 行与已知 award 表 3,545 行差 706%, resolved 仅指实体类别、行集不同待解释。devseek t13d 旁路真交付(导 4 表共 73MB+, 其中 t49 全量 792,149 行): 独立数据侧判 t30→player(72473 in 70-76k)、t49→person(792149 in 760-820k) 均 fit=true, 与 E56 裁决吻合; t22/t34 的 fit=false 是其基数表过期(club 写 3000-6000, 实际 84259), 不影响 E56。这是 devseek 首次有效产出, 证明'旁路+不卡主线'的投放方式可行。t13e 仍在跑, 不阻塞。",
+   "claim": "【阶段二收敛: 45 张表归纳完成, 29 resolved / 3 candidate / 11 negative / 2 empty】t13(luna)交 10 空白表+2空表: 4 张 A 锚 resolved(t12=awar/t33=club/t45=person/t48=person)、6 negative、2 empty(52/57 闭合式 14+0+8==22), 验收 4/4 压线达成。指挥官独立复核不依赖其解析器:(1) 4 个 A 锚的 file_off 指令逐条反汇编 + 4 个 cmp 站点立即数 big-endian 解码, 8/8 全一致(mov edi,[rdi+0x80]=AHp1@128 / mov edi,[rbx+0x44]=CMWE@68 / movsx ebx,[rdi+0x56]=gols@86 ×2);(2) schema df 全=1: AHp1→award, CMWE→club, gols→person; reader obj_seq 含对应偏移;(3) t12 的 23 偏移里 12 个落在 award 专属码簇(128/132/136/140/144/148/152/154-158) —— 全批最干净锚。**簇级补强**: t45/t48 单看是 gols 一码, 但 obj84=apps/gams、obj86=gols、obj88=fsgs/fsgt/ogls 三个连续槽全是 person 进球统计且宽度=2, 属簇级自洽, A 级维持; t33 的 chain_0145 虽混合(club47:person10), 但 9 个 C 前缀 club 专属码占 reader 18 偏移中的 9 个, A 级维持。关键边界: t45/t48 共用 reader 0x1543730, 且 chain_0153 在 t08 被 t58 认作 primary(score5) —— 属共用 getter 区, 不是冲突, 但'单码唯一'的说法要打折扣; t12 28,597 行与已知 award 表 3,545 行差 706%, resolved 仅指实体类别、行集不同待解释。flash-lane t13d 旁路真交付(导 4 表共 73MB+, 其中 t49 全量 792,149 行): 独立数据侧判 t30→player(72473 in 70-76k)、t49→person(792149 in 760-820k) 均 fit=true, 与 E56 裁决吻合; t22/t34 的 fit=false 是其基数表过期(club 写 3000-6000, 实际 84259), 不影响 E56。这是 flash-lane 首次有效产出, 证明'旁路+不卡主线'的投放方式可行。t13e 仍在跑, 不阻塞。",
    "evidence": {
     "artifacts": [
      "scratch/t13/out/anchors.json + verify.py(VERIFY PASS, 12表全覆盖+2空表)",
-     "scratch/t13d/out/audit.json + t22/t30/t34/t49.csv(devseek 首次有效交付)",
+     "scratch/t13d/out/audit.json + t22/t30/t34/t49.csv(flash-lane 首次有效交付)",
      "scratch/cmd/stage2_t13_recheck.json(指挥官独立复核)",
      "reports/stage2_table_identity.{json,md}(45表总清单, --selftest PASS)",
      "scripts/stage2_report.py(可复跑)"
@@ -1578,14 +1578,14 @@
   {
    "id": "E58",
    "date": "2026-11-18 23:45",
-   "author": "commander(t13e devseek 基数清单验收 + t49 行数张力发现)",
+   "author": "commander(t13e flash-lane 基数清单验收 + t49 行数张力发现)",
    "kind": "milestone+errata-minor",
    "level": "L1(26 实体基数, 17high/7mid/2low)+L2(交叉复算)+L0(非计数锚点)",
-   "claim": "【devseek 第三次交付: 基数清单 26 条, 并抓出 t49 与主库的行数张力】t13e(devseek)在判定'零产出、不等'之后 30 分钟内真交付 baselines.json(24KB)+baselines.md(12KB)+build.py(可复跑), status=partial 但内容完整: 26 条实体基数带出处与交叉验证(award3545/city56293/club84259/comp7047/cont7/inju115/nati251/stad48413/weat334/lcrg2488), 17 high / 7 mid / 2 low, 0 数字冲突; 另附 34 未识别表、5 负身份表、5 个非计数锚点(六大洲0..5 / England=139 / parent row352 / Bernabéu81044 / city Cnti=139)。**关键交叉**: t13d 用的是过期 club 基数(3000-6000), t13e 正确给出 84259(E33/E37 双复算), 再次确认 E56 对 t22/t34 的裁决不受 t13d 失配影响。**新发现的行数张力**: person 主库 basic_people_db=658011(E25 u32 count+E32 独立解压走查, high), 但 E56 判为 person 任职履历子表的 t49=792149, 多 134138 行(20.4%)。这不推翻 t49 归属(ajob/otea/plac 三个 df=1 码是硬证据), 但'静态任职履历'语义与行数比例不自洽 —— otea=Opposition 更像比赛出场记录。t13e 自己把 t49 标 mid 并注'行边界闭合与 entity 名字不是同一层证据', 判断审慎。已在 adjudicate.py 源码加入 E58 补注(非手改 JSON, 避免重跑覆盖), 并让 stage2_report.py 把 note 带入汇总表。**工程教训**: 我曾手工给 JSON 加注后被 adjudicate.py 重跑冲掉 —— 可复跑脚本的产出不可手工修改, 注记必须写回源码。devseek 战绩更新为 3 次有效(t13d/t13e + 早期一次)/ 多次超时, '旁路+不卡主线'策略已连续两次拿到有效交叉产出。",
+   "claim": "【flash-lane 第三次交付: 基数清单 26 条, 并抓出 t49 与主库的行数张力】t13e(flash-lane)在判定'零产出、不等'之后 30 分钟内真交付 baselines.json(24KB)+baselines.md(12KB)+build.py(可复跑), status=partial 但内容完整: 26 条实体基数带出处与交叉验证(award3545/city56293/club84259/comp7047/cont7/inju115/nati251/stad48413/weat334/lcrg2488), 17 high / 7 mid / 2 low, 0 数字冲突; 另附 34 未识别表、5 负身份表、5 个非计数锚点(六大洲0..5 / England=139 / parent row352 / Bernabéu81044 / city Cnti=139)。**关键交叉**: t13d 用的是过期 club 基数(3000-6000), t13e 正确给出 84259(E33/E37 双复算), 再次确认 E56 对 t22/t34 的裁决不受 t13d 失配影响。**新发现的行数张力**: person 主库 basic_people_db=658011(E25 u32 count+E32 独立解压走查, high), 但 E56 判为 person 任职履历子表的 t49=792149, 多 134138 行(20.4%)。这不推翻 t49 归属(ajob/otea/plac 三个 df=1 码是硬证据), 但'静态任职履历'语义与行数比例不自洽 —— otea=Opposition 更像比赛出场记录。t13e 自己把 t49 标 mid 并注'行边界闭合与 entity 名字不是同一层证据', 判断审慎。已在 adjudicate.py 源码加入 E58 补注(非手改 JSON, 避免重跑覆盖), 并让 stage2_report.py 把 note 带入汇总表。**工程教训**: 我曾手工给 JSON 加注后被 adjudicate.py 重跑冲掉 —— 可复跑脚本的产出不可手工修改, 注记必须写回源码。flash-lane 战绩更新为 3 次有效(t13d/t13e + 早期一次)/ 多次超时, '旁路+不卡主线'策略已连续两次拿到有效交叉产出。",
    "evidence": {
     "artifacts": [
      "scratch/t13e/out/baselines.json+baselines.md+build.py",
-     "scratch/cmd/stage2_t13_recheck.json(devseek_t13e_baselines 节)",
+     "scratch/cmd/stage2_t13_recheck.json(flash-lane_t13e_baselines 节)",
      "scratch/cmd/adjudicate.py(t49 note 源码补注)",
      "reports/stage2_table_identity.{md,json}(重生成, note 带入)"
     ],
@@ -1600,7 +1600,7 @@
      "t13e status=partial(任务书允许), 26 条非全部 79 张表; 34 unidentified 表仍无基数"
     ]
    },
-   "consequence": "阶段二交付更新: reports/stage2_table_identity.{md,json} 已把 t49 张力带入 note 列。devseek 连续两次(t13d/t13e)有效交付, 证明旁路任务投放方式成立。剩余边界: t49 语义待数据侧判; 34 unidentified 表无基数。"
+   "consequence": "阶段二交付更新: reports/stage2_table_identity.{md,json} 已把 t49 张力带入 note 列。flash-lane 连续两次(t13d/t13e)有效交付, 证明旁路任务投放方式成立。剩余边界: t49 语义待数据侧判; 34 unidentified 表无基数。"
   },
   {
    "id": "E59",
@@ -1608,11 +1608,11 @@
    "author": "commander(t13d 终版延迟到达后的重新验收)",
    "kind": "errata-minor",
    "level": "L2(数据侧值域/ID域交叉)+L1(基数口径)",
-   "claim": "【撤回 E57 的一处交叉证据: t30/t49 的'fit=true'是循环论证】t13d 完成通知延迟到达, 终版 audit.json(23:45, 19225B→21462B)与初版不同(与 t11 同样的延迟追加现象), 新增 quick_audit.md + _audit.py。**终版自我修正了基数**: 初版用过期 club 3000-6000 致 t22/t34 fit=false, 终版改用正确 club84259 / nation251。终版结论三要点:(1) **t22 数据侧反而支持 E56**: 449/84259=0.53% 不支持 club 主表, 但 c0 的 362 个非哨兵值全部落在 [86,82403] ⊂ club ID 域、行内无姓名文本 -> '按 club 引用+日期'的子表, 与 E56 的 club 球场/迁建子表一致(注意: 值落 club 域只说明'引用 club', 不等于'本表实体是 club', 这是 t13d 自己点出的最易误读处); (2) t34 判'无法判断'(相对 club 差12倍/nation 差28倍, c3/c4 ⊆ [0,251) 但仅81/54不同值 -> 每行引用一国而非每国一行), 与 E56 的 candidate 一致; (3) **关键撤回**: 我在 E57 写的't30→player、t49→person 均 fit=true, 与 E56 吻合'不成立 —— t13d 终版 caveat 自承 player 7万/person 79万的量级口径**直接取自本表行数**, 不是独立基数, 量级吻合不构成确认, 属循环论证。仓内可复核的独立基线仅 club84259(server table_3)与 nation251(table_10)。t30/t49 的归属维持 E56 的 A 级(靠 df=1 唯一码 ajob/otea/plac、futu/inju/pret/seve), 但数据侧不构成独立确认 —— 这条不影响结论, 只影响'证据强度'的表述。已把两路 devseek 的终版结论写进 stage2_report.py 的 md/json 输出(新增'数据侧交叉'与'实体基数清单'两段)。",
+   "claim": "【撤回 E57 的一处交叉证据: t30/t49 的'fit=true'是循环论证】t13d 完成通知延迟到达, 终版 audit.json(23:45, 19225B→21462B)与初版不同(与 t11 同样的延迟追加现象), 新增 quick_audit.md + _audit.py。**终版自我修正了基数**: 初版用过期 club 3000-6000 致 t22/t34 fit=false, 终版改用正确 club84259 / nation251。终版结论三要点:(1) **t22 数据侧反而支持 E56**: 449/84259=0.53% 不支持 club 主表, 但 c0 的 362 个非哨兵值全部落在 [86,82403] ⊂ club ID 域、行内无姓名文本 -> '按 club 引用+日期'的子表, 与 E56 的 club 球场/迁建子表一致(注意: 值落 club 域只说明'引用 club', 不等于'本表实体是 club', 这是 t13d 自己点出的最易误读处); (2) t34 判'无法判断'(相对 club 差12倍/nation 差28倍, c3/c4 ⊆ [0,251) 但仅81/54不同值 -> 每行引用一国而非每国一行), 与 E56 的 candidate 一致; (3) **关键撤回**: 我在 E57 写的't30→player、t49→person 均 fit=true, 与 E56 吻合'不成立 —— t13d 终版 caveat 自承 player 7万/person 79万的量级口径**直接取自本表行数**, 不是独立基数, 量级吻合不构成确认, 属循环论证。仓内可复核的独立基线仅 club84259(server table_3)与 nation251(table_10)。t30/t49 的归属维持 E56 的 A 级(靠 df=1 唯一码 ajob/otea/plac、futu/inju/pret/seve), 但数据侧不构成独立确认 —— 这条不影响结论, 只影响'证据强度'的表述。已把两路 flash-lane 的终版结论写进 stage2_report.py 的 md/json 输出(新增'数据侧交叉'与'实体基数清单'两段)。",
    "evidence": {
     "artifacts": [
      "scratch/t13d/out/audit.json(终版23:45)+quick_audit.md+_audit.py",
-     "scratch/cmd/stage2_t13_recheck.json(devseek_t13d_crosscheck 已重写)",
+     "scratch/cmd/stage2_t13_recheck.json(flash-lane_t13d_crosscheck 已重写)",
      "reports/stage2_table_identity.{md,json}(新增两段落, --selftest PASS)"
     ],
     "commander_verify": [
@@ -1634,7 +1634,7 @@
    "author": "commander(wave7 晨裁+发射)",
    "kind": "adjudication+dispatch",
    "level": "L1(裁决记录)",
-   "claim": "【晨裁六项 + wave7 发射】(1) Cccn@row+8 正式降级为 low-confidence candidate:t21 全表独立走查 row+0==row+8 在 55868/84259 行成立,t21b CFG 审计未找到 per-row class discriminator,旧 E36 L3 口径撤回,保持 unpromoted;(2) t22 Ncpi 验收通过并已入 reports/(L3,仅 client 2430  scope,231/231 连接+六国语言对照);(3) t23 对账验收通过:client nation 文法 closed,t19 partial 台账与 g2/Ncpi 无矛盾,server table_10 文法开放;(4) 台账晋升口径:t18 行坐标版 fields_*.json 为唯一正典工作台账,reports/ 晋升推迟到 wave7 命名放量产出验证增量后一次性做,避免 8% 命名率台账二次搬运;(5) L4 仍=0,用户未对启动游戏/编辑器给具体授权;(6) sol 额度:用户本轮明示 gpt-6.2-sol 用于最难任务,覆盖旧台账再用需批注记。wave7 三路:t24 club 全 cursor(sol)/t25 nation client 字段放量(luna)/t26 hist+people 档案普查(devseek)。",
+   "claim": "【晨裁六项 + wave7 发射】(1) Cccn@row+8 正式降级为 low-confidence candidate:t21 全表独立走查 row+0==row+8 在 55868/84259 行成立,t21b CFG 审计未找到 per-row class discriminator,旧 E36 L3 口径撤回,保持 unpromoted;(2) t22 Ncpi 验收通过并已入 reports/(L3,仅 client 2430  scope,231/231 连接+六国语言对照);(3) t23 对账验收通过:client nation 文法 closed,t19 partial 台账与 g2/Ncpi 无矛盾,server table_10 文法开放;(4) 台账晋升口径:t18 行坐标版 fields_*.json 为唯一正典工作台账,reports/ 晋升推迟到 wave7 命名放量产出验证增量后一次性做,避免 8% 命名率台账二次搬运;(5) L4 仍=0,用户未对启动游戏/编辑器给具体授权;(6) sol 额度:用户本轮明示 gpt-6.2-sol 用于最难任务,覆盖旧台账再用需批注记。wave7 三路:t24 club 全 cursor(sol)/t25 nation client 字段放量(luna)/t26 hist+people 档案普查(flash-lane)。",
    "evidence": "scratch/t21/out/audit.json; scratch/t21/out/control_flow.json; reports/t22_nation_capital.{json,md}; scratch/t23/out/nation_status.json; commits 79947bc/c3eed3b/c8f5679",
    "consequence": "Cccn 不得再作锚点使用;wave7 产物到齐后按验收队列独立抽验入账 E61+"
   },
@@ -1745,7 +1745,7 @@
    "author": "commander(t26 独立验收,census)",
    "kind": "acceptance",
    "level": "L1(全文法自走)+L2(basic_people_db 跨文件 duni 逐条对齐)",
-   "claim": "【t26 验收通过 — people_db.dat 全文法 census 闭合,658011 记录存在性证实(body 字段布局诚实未解)】devseek 四次 attempt 均 rc=124 超时,launcher 判 gave up(rc=1),但产出实质 complete_grammar_census 交付(无 DONE.md 致误判)。指挥官独立核验 18 项全绿(自实现 compact/basic_people 文法复算,不 import devseek 结果):people_db payload 400443970B,SHA 21686a98…,头部 u32@2=658011;compact class-5 文法 1193 行(key 集合连续[656818,658010],行序非 ordinal 序),首处硬断裂@55750(下一段首 key=354399,属 unknown 表族);basic_people_db 54060043B/658011 行按 class 宽{1:83,2:83,3:83,4:34,5:22}闭合 walk_end=54060034 walk_bad=null,class 分布{1:166064,2:476158,3:4757,4:9839,5:1193};compact 1193=class-5 1193,按 key 跨文件 duni 1193/1193 全等(互补视图非超集);trailer 签名法 658011 个规范位置(trailer_pos.npy distinct 658011,key 域[0,658010]),抽样 40/40 trailer(key2,duni,duni)@q 与 basic_people[key].duni 全等→658011 key 100% 覆盖。【裁决】命题 people_db 承载 658011 条完整 person 记录=supported(有保留):记录存在性成立,但 name→trailer 间 body(约 400-770B)字段含义全未定;覆盖率依赖 basic_people 校验有同源循环风险,独立锚点 t15c person_duni.npy 646979 distinct 100% 出现;文法 B 186108 是下界(只认拉丁大写名)。people_db 行序非 ordinal(corr -0.064)。【bonus】hit_cross.json:non_pl_hist_id.dat 1493086 元素/dt 77098632B/stride24 全除尽/pl_hist_id.dat 1031162 元素/dt 198695332B/stride44 全除尽,单调非减数组语义(L1 candidate)。walk_people/hit_cross selftest OK,锚点 7/7。",
+   "claim": "【t26 验收通过 — people_db.dat 全文法 census 闭合,658011 记录存在性证实(body 字段布局诚实未解)】flash-lane 四次 attempt 均 rc=124 超时,launcher 判 gave up(rc=1),但产出实质 complete_grammar_census 交付(无 DONE.md 致误判)。指挥官独立核验 18 项全绿(自实现 compact/basic_people 文法复算,不 import flash-lane 结果):people_db payload 400443970B,SHA 21686a98…,头部 u32@2=658011;compact class-5 文法 1193 行(key 集合连续[656818,658010],行序非 ordinal 序),首处硬断裂@55750(下一段首 key=354399,属 unknown 表族);basic_people_db 54060043B/658011 行按 class 宽{1:83,2:83,3:83,4:34,5:22}闭合 walk_end=54060034 walk_bad=null,class 分布{1:166064,2:476158,3:4757,4:9839,5:1193};compact 1193=class-5 1193,按 key 跨文件 duni 1193/1193 全等(互补视图非超集);trailer 签名法 658011 个规范位置(trailer_pos.npy distinct 658011,key 域[0,658010]),抽样 40/40 trailer(key2,duni,duni)@q 与 basic_people[key].duni 全等→658011 key 100% 覆盖。【裁决】命题 people_db 承载 658011 条完整 person 记录=supported(有保留):记录存在性成立,但 name→trailer 间 body(约 400-770B)字段含义全未定;覆盖率依赖 basic_people 校验有同源循环风险,独立锚点 t15c person_duni.npy 646979 distinct 100% 出现;文法 B 186108 是下界(只认拉丁大写名)。people_db 行序非 ordinal(corr -0.064)。【bonus】hit_cross.json:non_pl_hist_id.dat 1493086 元素/dt 77098632B/stride24 全除尽/pl_hist_id.dat 1031162 元素/dt 198695332B/stride44 全除尽,单调非减数组语义(L1 candidate)。walk_people/hit_cross selftest OK,锚点 7/7。",
    "evidence": [
     "scratch/t26/out/people_walk.md(complete_grammar_census)",
     "scratch/t26/out/people_walk.json",
@@ -1756,7 +1756,7 @@
     "scratch/cmd/t26_spot.py(指挥官 18/18)",
     "scratch/t26/trailer_pos.npy+trailer_key.npy(658011,派生缓存不入仓)"
    ],
-   "consequence": "Stage2 people/hist 表边界文法 census 完成:people_db 658011 记录三变体文法定位+100% key 覆盖,basic_people_db 658011 行 class 闭合。开放硬活:people_db body 字段布局(变长记录列级切分,trailer 间距 q[i]-q[i-1] 作记录长,固定尾标 b600e207/01006c07 是否列分隔符待验)→sol 级任务,排队待 subtable 管线后。断裂点 55750 后段表按 unknown 处理(对照 t15 fk.json 51 表)。hist_id stride24/44 数组语义待绑定 dt payload 列。devseek 超时但产出可用,launcher 启发式对无 DONE.md 的长任务误判 gave up——后续长任务宜显式写 DONE 或提高 TMO。大缓存 pkl/npy(~800MB)加 .gitignore 排除。"
+   "consequence": "Stage2 people/hist 表边界文法 census 完成:people_db 658011 记录三变体文法定位+100% key 覆盖,basic_people_db 658011 行 class 闭合。开放硬活:people_db body 字段布局(变长记录列级切分,trailer 间距 q[i]-q[i-1] 作记录长,固定尾标 b600e207/01006c07 是否列分隔符待验)→sol 级任务,排队待 subtable 管线后。断裂点 55750 后段表按 unknown 处理(对照 t15 fk.json 51 表)。hist_id stride24/44 数组语义待绑定 dt payload 列。flash-lane 超时但产出可用,launcher 启发式对无 DONE.md 的长任务误判 gave up——后续长任务宜显式写 DONE 或提高 TMO。大缓存 pkl/npy(~800MB)加 .gitignore 排除。"
   },
   {
    "id": "E69",
@@ -1804,9 +1804,9 @@
    "author": "commander(verify sol t36)",
    "kind": "acceptance_partial_core_complete",
    "level": "L3",
-   "claim": "Cdbt/table33 STARTING_CLUB_DEBT server 32409x79B 全闭合(13+32409*(1+66+12)+9=2560333,SHA b2bf8e2f)。5/5全L3(第二个全晋级继CSrs):cash@body4 i32_le[-1e9,1e9]实测[-316157504,685123648]含负债务/sour@14 i8_enum 18值{-3,-2,0..15}(R8D零臂排除[-5,-3,0])/stdt@19 packed_u16_day_year(low9 day,mid7零,high16 year;全32409有效,row0 day1year1900)/endt@23 packed同/inrt@27 ieee754_binary32_le(real=float32证实;1317行special float-99.0->boxed0,余有限非负max25.0)。properties66B含22 transfers但仅5为schema字段,余父club UID@0+上下文成员。identity@66 lane0 ordinal。footer 0000000001997e0000末u32=32409。sol openai-codex撞usage limit(rc=1,15:02)截断在cursor+fields完成后,REPORT/verify.py/DONE.md未写;核心cursor complete_observed_row_cursor+5L3 fields+instructions×7+branches×2已落盘。",
+   "claim": "Cdbt/table33 STARTING_CLUB_DEBT server 32409x79B 全闭合(13+32409*(1+66+12)+9=2560333,SHA b2bf8e2f)。5/5全L3(第二个全晋级继CSrs):cash@body4 i32_le[-1e9,1e9]实测[-316157504,685123648]含负债务/sour@14 i8_enum 18值{-3,-2,0..15}(R8D零臂排除[-5,-3,0])/stdt@19 packed_u16_day_year(low9 day,mid7零,high16 year;全32409有效,row0 day1year1900)/endt@23 packed同/inrt@27 ieee754_binary32_le(real=float32证实;1317行special float-99.0->boxed0,余有限非负max25.0)。properties66B含22 transfers但仅5为schema字段,余父club UID@0+上下文成员。identity@66 lane0 ordinal。footer 0000000001997e0000末u32=32409。sol gpt-lane撞usage limit(rc=1,15:02)截断在cursor+fields完成后,REPORT/verify.py/DONE.md未写;核心cursor complete_observed_row_cursor+5L3 fields+instructions×7+branches×2已落盘。",
    "evidence": "scratch/t36/out/{cursor_cdbt.json,fields_cdbt.json,instructions.part001-007,branches.part001-002};commander scratch/cmd/t36_spot.py 9/9(闭合/SHA/cash域/sour18enum/stdt+endt packed全有效/inrt float32 1317special-99.0余非负max25/identity/footer32409);anchors 7/7。sol verify.py缺失,commander spot为闸。inrt special是float值-99.0(raw0xC2C60000)非raw bits-99,我spot初误用bits已修。",
-   "consequence": "club子表L3累计44(Cstc14+Clhs8+CSrs10+Cmti5+CNtp2+Cdbt5)。子表复制法第6次成功(5/5全晋级第2次)。**sol openai-codex usage limit reached,新sol静态任务暂停待额度恢复**。L3静态cursor线受阻;剩余子表Tchl34/Csme59/Cafl-Cvfl静态需sol。fleet转向luna/devseek数据侧或luna试简单子表静态。inrt float32+packed date+负cash域为债务类子表模板。"
+   "consequence": "club子表L3累计44(Cstc14+Clhs8+CSrs10+Cmti5+CNtp2+Cdbt5)。子表复制法第6次成功(5/5全晋级第2次)。**sol gpt-lane usage limit reached,新sol静态任务暂停待额度恢复**。L3静态cursor线受阻;剩余子表Tchl34/Csme59/Cafl-Cvfl静态需sol。fleet转向luna/flash-lane数据侧或luna试简单子表静态。inrt float32+packed date+负cash域为债务类子表模板。"
   },
   {
    "id": "E74",
@@ -1821,12 +1821,12 @@
   {
    "id": "E75",
    "date": "2026-11-19",
-   "author": "commander(verify devseek t33)",
+   "author": "commander(verify flash-lane t33)",
    "kind": "acceptance",
    "level": "L2",
-   "claim": "t33 profile batch II 7/7表完成。t12 STARTING_AWARD_HISTORY 28597变长(封口14+3739548+8=3739570)/t39 STARTING_AVERAGE_POINTS 117x42固定/t45 STARTING_RECORD 84477变长(7608748)/t48 STARTING_RECORD 5210变长(446049)/t58 STARTING_WEEKLY_WAGE_CONTRIBUTION 8x45固定(382)/t59 STARTING_MEDIA_EXPECTATIONS 9079变长(224880)/t73 STARTING_ITALIAN_SERIE_A_NON_EU_PLAYER_SIGNE 1x23固定(45)。固定表双约定(14+n*s+8 vs 13+n*s+9)试+逐行尾锚(ordinal|id|id|marker)选;变长tail-13帧前向走查ordinal==行号+相邻u32相等+末字节0x00/0x0C。帧歧义诚实记录:t12多解34/28597(max5候选长)/t45 1/t48 2/t59 1。parent连接全candidate/unknown L3=0:t12->AWsh/t39->csap/t45,t48->Plhs/Pnph/Pacl/t58->Cwcl/t59->Csme。devseek attempt1 rc124超时,attempt2自修verify从41PASS11FAIL至52PASS0FAIL(中间态快照非profile错)。",
+   "claim": "t33 profile batch II 7/7表完成。t12 STARTING_AWARD_HISTORY 28597变长(封口14+3739548+8=3739570)/t39 STARTING_AVERAGE_POINTS 117x42固定/t45 STARTING_RECORD 84477变长(7608748)/t48 STARTING_RECORD 5210变长(446049)/t58 STARTING_WEEKLY_WAGE_CONTRIBUTION 8x45固定(382)/t59 STARTING_MEDIA_EXPECTATIONS 9079变长(224880)/t73 STARTING_ITALIAN_SERIE_A_NON_EU_PLAYER_SIGNE 1x23固定(45)。固定表双约定(14+n*s+8 vs 13+n*s+9)试+逐行尾锚(ordinal|id|id|marker)选;变长tail-13帧前向走查ordinal==行号+相邻u32相等+末字节0x00/0x0C。帧歧义诚实记录:t12多解34/28597(max5候选长)/t45 1/t48 2/t59 1。parent连接全candidate/unknown L3=0:t12->AWsh/t39->csap/t45,t48->Plhs/Pnph/Pacl/t58->Cwcl/t59->Csme。flash-lane attempt1 rc124超时,attempt2自修verify从41PASS11FAIL至52PASS0FAIL(中间态快照非profile错)。",
    "evidence": "scratch/t33/out/{profiles/7表.profile.json+.rows.jsonl,subtable_candidates.json,REPORT.md,verify.py(52/0 PASS),PROGRESS.md};scripts/t33_profile_batch.py;commander scratch/cmd/t33_spot.py 7/7(多帧payload size+SHA/固定封口算术/rows hash/行数==count)。t73单帧首帧592528c3匹配;我帧walker越成员边界into后续archive成员但size+SHA匹配选对帧有效。",
-   "consequence": "nation/person侧子表备料(Plhs/Pnph/Pacl/AWsh/csap/Cwcl/Csme候选)。devseek自修verify至全过(完成度高)。帧歧义记录为变长表walk树立诚实先例。sol额度受限期间luna/devseek数据侧备料主线。下一luna t37 nation侧广度inventory。"
+   "consequence": "nation/person侧子表备料(Plhs/Pnph/Pacl/AWsh/csap/Cwcl/Csme候选)。flash-lane自修verify至全过(完成度高)。帧歧义记录为变长表walk树立诚实先例。sol额度受限期间luna/flash-lane数据侧备料主线。下一luna t37 nation侧广度inventory。"
   },
   {
    "id": "E76",
@@ -1845,8 +1845,8 @@
    "kind": "acceptance_partial",
    "level": "L2",
    "claim": "t37 nation侧广度inventory partial_nation_parent_identity_coverage。冻结nation.xml 346字段29 list父码(20有item/9零item),luna诚实校正供基线25(17item+8zero)->冻结29,补EDfx/Tchl/EDsc/AXML不静默丢弃。24 unknown/4 existing_t28_closed(Nagr/Nefr/Nlns/Nnfr,client table10 inline,Nagr162x12)/1 low_candidate。7 L2候选item字段/65列匹配/new_L3=0/L4=0。**关键:Tchl->server table34 STARTING_TEAM_CUP_HISTORY为club/nation共享表低置信候选,nation与club Tchl item签名完全匹配,t29俱乐部侧关联+stage2 entity仍candidate;table34封口14+7115*44+8=313082 SHA a07b2bb7**。25 unknown/partial父码待sol静态发现。",
-   "evidence": "scratch/t37/out/{nation_subtable_inventory.json,REPORT.md,profiles/table_server_34.profile.json};commander scratch/cmd/t37_spot.py 12/12(29父码20+9/confidence24-4-1/t28四父码/Tchl shared/table34多帧313082+SHA/封口/profile存在);anchors7/7。**基础设施洞察:entry packed_size=真实帧压缩size,stub首帧 precedes(hit-off=9,frame1 stub12B),off+packed_size界定截断真实第二帧(BOUNDED frame2=287410 eof=False);UNBOUNDED size+SHA匹配得313082 a07b2bb7 eof=True。多帧选帧须无界匹配或按next member offset界定,不能用off+packed_size**。此修正t38 brief指导(devseek selftest要求server34=313082将自纠)。",
-   "consequence": "nation侧备料完成(补club t29b)。Tchl club/nation共享证实,t39 sol任务书已含排他blocker,须沿factory case34+getter 4CC+entity_tag判定共享语义不妄断独占。packed_size截断洞察为t38多帧加载器关键修正(已记,devseek selftest自纠)。25 nation unknown父码+club 29 unknown待sol额度恢复后静态发现。luna verify.py收尾中(如t35模式)。"
+   "evidence": "scratch/t37/out/{nation_subtable_inventory.json,REPORT.md,profiles/table_server_34.profile.json};commander scratch/cmd/t37_spot.py 12/12(29父码20+9/confidence24-4-1/t28四父码/Tchl shared/table34多帧313082+SHA/封口/profile存在);anchors7/7。**基础设施洞察:entry packed_size=真实帧压缩size,stub首帧 precedes(hit-off=9,frame1 stub12B),off+packed_size界定截断真实第二帧(BOUNDED frame2=287410 eof=False);UNBOUNDED size+SHA匹配得313082 a07b2bb7 eof=True。多帧选帧须无界匹配或按next member offset界定,不能用off+packed_size**。此修正t38 brief指导(flash-lane selftest要求server34=313082将自纠)。",
+   "consequence": "nation侧备料完成(补club t29b)。Tchl club/nation共享证实,t39 sol任务书已含排他blocker,须沿factory case34+getter 4CC+entity_tag判定共享语义不妄断独占。packed_size截断洞察为t38多帧加载器关键修正(已记,flash-lane selftest自纠)。25 nation unknown父码+club 29 unknown待sol额度恢复后静态发现。luna verify.py收尾中(如t35模式)。"
   },
   {
    "id": "E78",
@@ -1871,7 +1871,7 @@
   {
    "id": "E80",
    "date": "2026-11-19",
-   "author": "commander(verify devseek t38)",
+   "author": "commander(verify flash-lane t38)",
    "kind": "acceptance",
    "level": "L2",
    "claim": "t38 多帧/成员感知payload加载器 scripts/t38_multiframe.py:load_payload_mf(codec,archive,tid)。**勘误E66/E77:460条目实测全单帧**,唯一帧len恒==entry.size;所谓\"多帧/stub首帧\"实为坐标系bug。真因:fm24_dump.load_payload漏加FMF data_base=34,成员绝对起点=data_base+offset;E66的12B是前一成员non_player_bans.dat(25B tad空stub)的payload,非本成员stub。判定式[前一成员packed_size<data_base]预测==实测symmetric_diff=0,命中119条目(含lang_update 117此前未暴露)。entry.sha256经460/460证实为压缩区SHA(非解压payload SHA),用作成员定界自证。选帧=len==size唯一命中,无匹配/末成员截断raise FrameError不回落。",
@@ -1931,11 +1931,11 @@
   {
    "id": "E86",
    "date": "2026-11-19",
-   "author": "commander(verify devseek t43)",
+   "author": "commander(verify flash-lane t43)",
    "kind": "acceptance",
    "level": "L1",
    "claim": "t43 把 E80 data_base 修复最小化集成进共享加载器 scripts/fm24_dump.py 的 load_payload(仅此一函数 +40/-5,AST 逐节点核对其余函数/常量零变化,签名不变,不 import t38)。data_base 从 codec _archive_layout 动态取(非硬编码34,verify AST regex \b34\b  absent);成员区=[base+offset,+packed_size),区内逐帧解压按 len==entry.size 唯一选帧,无吻合帧 raise(不回落首帧/不静默截断)。fm24_dump --selftest 49/0/1SKIP→50 PASS/0 FAIL/0 SKIP(server34 SKIP→PASS)。79 数字表 fm24_dump==t38 load_payload_mf==独立 size-select 解码逐字节全等(79/79),全 len==size。119 受影响条目(server2/lang_update117,判定式 前一成员 packed_size<data_base)修后全 len==size/单帧/leftover0/sha256(packed区)==entry.sha256;旧法坐标 119/119 错 -25B(落前一成员内)。方法论发现:42 个 lang_update 条目旧法返回字节巧合相同的 12B stub(entry.size==12==前成员 stub 模板),len/payload-SHA 自检在此类条目假阳,仅成员边界判据可识;verify 把 legacy坐标错119/119 与 legacy字节不同77/119 分立。负例 server34 legacy=12B(600175712b2f553a,-25B)保留不删,fixed=313082/a07b2bb7。t38 selftest 25→24 PASS 是正向证据(旧法 DIFF 提示行消失,FAIL 仍0,build.py git show HEAD exec 钉死)。data_base=34 结构含义仍候选(未 L3 exe 静态确认),仅操作性偏移。L4=0。",
-   "evidence": "scripts/fm24_dump.py load_payload fix(mtime17:15稳定);scratch/t43/out/{integration_report.json,verify.py,verify_result.json,REPORT.md}+scratch/t43/build.py;verify.py --selftest 19 PASS/0 FAIL(自解析FMF头base=start+9+u64(start+17)/自写DirReader/自写选帧/subprocess调fm24_dump不持引用/对照t33t29落盘证据);scratch/cmd/t43_spot.py 13/13(79表三重解码逐字节全等+119 affected+canonical server34/59/10/client10+selftest50/0/0+anchors7/7);t39_spot26/26 t34_spot13/13 t36_spot9/9。交付哨兵 DONE.md 因 devseek 三次 attempt 超时(rc=124)未写,commander 据完整已验交付自写 DONE.accepted.md。",
+   "evidence": "scripts/fm24_dump.py load_payload fix(mtime17:15稳定);scratch/t43/out/{integration_report.json,verify.py,verify_result.json,REPORT.md}+scratch/t43/build.py;verify.py --selftest 19 PASS/0 FAIL(自解析FMF头base=start+9+u64(start+17)/自写DirReader/自写选帧/subprocess调fm24_dump不持引用/对照t33t29落盘证据);scratch/cmd/t43_spot.py 13/13(79表三重解码逐字节全等+119 affected+canonical server34/59/10/client10+selftest50/0/0+anchors7/7);t39_spot26/26 t34_spot13/13 t36_spot9/9。交付哨兵 DONE.md 因 flash-lane 三次 attempt 超时(rc=124)未写,commander 据完整已验交付自写 DONE.accepted.md。",
    "consequence": "共享加载器 load_payload 缺陷家族(119条目)闭合,与已接受参考加载器 load_payload_mf 全等,无回归;后续所有用 fm24_dump.load_payload 的任务(t34/t36等)受益。t38_multiframe.py 工作树被另一会话纯增 +145行(check#10/#11 无界选帧对照 decode_frames_unbounded/boundary_spanning_proof,client3 bounded1/unbounded28 size_hits1,client23 歧义),非 t43 改动,HEAD24/工作树32 均0FAIL,另案 reconcile 提交。data_base 结构含义待 L3。L4=0,未启动游戏/编辑器/IDA。"
   },
   {
@@ -1984,7 +1984,7 @@
    "author": "commander",
    "kind": "acceptance",
    "level": "L2",
-   "claim": "t50(logfare,devseek 饱和 3 败后改道)t9/table_extra_9 数据侧独立画像(L1+L2,L3=0/L4=0):4 成员单帧解码 anchors 七项与 t47 archive 记录逐字节一致;table_9 行界由 13B identity tail(ordinal|row_id|row_id|00)闭合 client 13+31935+8=31956/server 13+307543+8=307564,DP 计数在 row_id≠0∧严格递增下唯一铺法=1(非首解);identity census ordinal 0..250/重复 lane 相等/marker 0/row_id 唯一递增/末行 row_id==footer u32 82082540 双档一致;敏感性:footer=8 由数据钉死,header 11..15 数据不可判(候选),允许 row_id=0 server 炸出 362 宽解(负例保留),放弃递增 client6/server24;extra_9 仅块首闭合 ordinal|name_len|name 251 块连续(server block0=(0,11,\"Les Fennecs\")),块内文法未解,client 1/server 4 铺法;无独立 footer 负例保留。身份尾绝对起点与已接受 t49 cursor identity_at 全 251 行一致(spot cross-walk),body 起点 +1 偏移=marker/selector 归属数据不可判,已如实记录。",
+   "claim": "t50(flash-1017-lane-b,flash-lane 饱和 3 败后改道)t9/table_extra_9 数据侧独立画像(L1+L2,L3=0/L4=0):4 成员单帧解码 anchors 七项与 t47 archive 记录逐字节一致;table_9 行界由 13B identity tail(ordinal|row_id|row_id|00)闭合 client 13+31935+8=31956/server 13+307543+8=307564,DP 计数在 row_id≠0∧严格递增下唯一铺法=1(非首解);identity census ordinal 0..250/重复 lane 相等/marker 0/row_id 唯一递增/末行 row_id==footer u32 82082540 双档一致;敏感性:footer=8 由数据钉死,header 11..15 数据不可判(候选),允许 row_id=0 server 炸出 362 宽解(负例保留),放弃递增 client6/server24;extra_9 仅块首闭合 ordinal|name_len|name 251 块连续(server block0=(0,11,\"Les Fennecs\")),块内文法未解,client 1/server 4 铺法;无独立 footer 负例保留。身份尾绝对起点与已接受 t49 cursor identity_at 全 251 行一致(spot cross-walk),body 起点 +1 偏移=marker/selector 归属数据不可判,已如实记录。",
    "evidence": "scratch/t50/out/(profile_t9.json+profiles/*.rows.jsonl x4+grammar_diff_t9.json+verify.py+REPORT.md+DONE.md);builder scripts/t50_nation_t9_profile.py --selftest/--build rc0;独立 verify --check 15 组 rc0;anchors 7/7;指挥官独立 spot scratch/cmd/t50_spot.py 45/45(独立重解码 4 payload SHA 跨 E89/E90 吻合,251 行 tiling+census+row_id 原字节抽查,身份尾位置 cross-walk vs t49,extra_9 块结构原字节,362/50331648 负例在场)。",
    "consequence": "t9 主表行界获数据侧独立 L2 交叉验证(三方一致:t49 静态 wire/t50 数据 DP/t51 复用复walk);extra_9 判明为 nation 名称表形态(ordinal|name_len|name)——TCrs sidecar 假设的负向证据,转入 t53 处置;footer 8B vs 9B 与 header 13 切分的归属歧义以敏感性表存档,后续任何表勿以数据单方判定 header。L4=0。"
   },
@@ -2524,7 +2524,7 @@
     "deliverables": "inventory.json: club 34 (unnamed 20/l3_claimed 9/held 5), comp 84 (unnamed 36/l3_claimed 32/held 4/collection_closed 12), nation 40 (unnamed 24/l3_claimed 5/held 10/identity_envelope 1); fingerprints.json: per-slot width histogram, first/last (row,absolute,raw), distinct, zero/all-ones ratios, u8..i32/f32 interpretations, value histograms, FK probes (1B slots marked non-discriminating), xref_hint shape-only",
     "escalations": "10, all nation inner-item variable grammars (A/B/C/D segments, Nftb etc.) — discipline-held, handed to t75 sol",
     "replay": "frozen-trajectory replay: club/client 84,259 rows payload 6,932,082 header 13 footer 9 coordinate_digests_matched=16; comp/nation same method; inputs_sha256 11 artifacts",
-    "status": "partial — verify.py/REPORT/DONE not delivered (devseek 40-min wall killed 3 attempts); commander-written per t53/t68 precedent",
+    "status": "partial — verify.py/REPORT/DONE not delivered (flash-lane 40-min wall killed 3 attempts); commander-written per t53/t68 precedent",
     "commander_spot": "club selector histogram {0:84256,12:3} exactly matches frozen t57 REPORT; builder --help/--selftest PASS; grading_ceiling L2/candidate, L4=0"
    },
    "evidence": [
@@ -2600,7 +2600,7 @@
     "scope": "t78 real physical-coverage denominator for club/nation/comp 1,034 top-level XML occurrences (frozen artifacts only, no .dat read, no disassembly)",
     "denominator": "1034 = club 433 + nation 346 + comp 255; buckets: mapped_l3 99 (club 45 incl t71 24 / nation 5 / comp 49), independent_member 11, string_name_table 0, ui_or_derived 24, held 59, unresolved_wire_slot 277, no_wire_evidence 564",
     "physical_coverage": "110/1034 = 10.6% carried by physical members; club 239 unresolved occurrences hang on just 20 unnamed slots (selector, derived_170/178, ref_e0, name_len/short_len, raw166/16c/168, vec110/130/138, obj150_tag, base18/30/60/78/90/a8) — highest naming ROI; comp 38 on 36 slots; nation 0 unresolved but 318 no_wire_evidence (grammar closed by t75, naming needs name-pool/t02)",
-    "status": "complete — commander local build; devseek 3 attempts hit walls/empty-out (t72/t53 precedent); write_coverage/write_done were missing and completed by commander; selftest 14/14 anchors PASS (E99 49/10, t64 38, 196-38-13-5=140, mapped_l3 sum 99, t71 club-spine id/code match)",
+    "status": "complete — commander local build; flash-lane 3 attempts hit walls/empty-out (t72/t53 precedent); write_coverage/write_done were missing and completed by commander; selftest 14/14 anchors PASS (E99 49/10, t64 38, 196-38-13-5=140, mapped_l3 sum 99, t71 club-spine id/code match)",
     "purpose": "priority basis for Wave 10/11 ordering and the targeted t02 Top-N list (user directive: get real denominator first)"
    },
    "evidence": [
@@ -2642,12 +2642,12 @@
    "kind": "acceptance",
    "level": "L3",
    "claim": {
-    "scope": "t79 (neon xhigh, first agy-lane run) stadium/team/extra_24 static L3 harvest + CLUB+0x18 forwarding chain closed",
+    "scope": "t79 (neon xhigh, first neon-cli-lane run) stadium/team/extra_24 static L3 harvest + CLUB+0x18 forwarding chain closed",
     "stadium": "stadium.xml 60 occurrences: 41 L3, 4 held, 9 unhandled_no_getter, 5 classified (editor_metadata x2, computed, language_layer, forwarded, subtable_backed); client 38B/server 181B frames from t74 E115; server-only 143B field block tied to TEAM-style members; 7 internal wire slots catalogued; anchors Scti@3/Slat@17/Slon@21/rdui@25/duni@29 re-verified",
     "team": "team.xml 25: 11 L3, 2 held, 2 unhandled, 2 computed, 6 non_wire_forwarded; t66's t24 ordinal->UID 84,507 reused; table_extra_24 82B wire layout with 3 mapped fields",
     "club_forwarded_6": "Crep/Cdvi/Cldi/Cndi/Codi/Csti upgraded held(t63)->L3 via proven chain CLUB+0x18 -> first Team: e.g. Crep getter 0xe8be31->0xe8ea2e (**(CLUB+0x18) -> movsx [team+0xa8], default 1500 if empty), setter 0xe84049->0xe851bf->0xfc9350->0x3c951a0 clamp 1..10000; domain 84,259 clubs: 82,515 with team, 1,744 default, raw 0..9400, 0 violations; Csti 55,498 live ordinal hits 0 miss, wrong-UID control 1,833 vs 53,665 misses documented",
     "verification": "verify.py independent 12/12 PASS; t01 anchors 7/7; builder 91,692B with --help/--selftest; xref ledger carries VA/bytes/RTTI/vtable/row-frame cross-check and preserved old negatives",
-    "provider_note": "first agy 'Gemini 4 Neon (XHigh)' lane (launch_agy.sh); delivered single-attempt in ~48min; ledger ID sequence: t79 landed before t76a/b/c acceptance, so E117 = t79 (user's planned E-mapping was indicative, append-only sequence preserved)"
+    "provider_note": "first neon-cli 'Gemini 4 Neon (XHigh)' lane (launch_neon.sh); delivered single-attempt in ~48min; ledger ID sequence: t79 landed before t76a/b/c acceptance, so E117 = t79 (user's planned E-mapping was indicative, append-only sequence preserved)"
    },
    "evidence": [
     "scratch/t79/out/field_map.json",
@@ -2700,7 +2700,7 @@
      "DBvw (comp.xml) empty-name defect present in BOTH snapshot and master (4 values, 4 empty names) — supplement cannot repair it",
      "t75 six unfrozen 4CC (Ccre/cosr/Npop/Ncpi/CICF): 0 occurrences across snapshots+master.json — exe-only getters with no XML enum linkage; correct closure path is L3 static getter chains (t79/t82/t83 paradigm), not enum dictionaries"
     ],
-    "action": "t80 devseek lane killed 05:39 (attempt 2 mid-flight, 0 files); prompts/t80_fix1.md retained but not dispatched; devseek slot redirected to t84 (name tables)"
+    "action": "t80 flash-lane lane killed 05:39 (attempt 2 mid-flight, 0 files); prompts/t80_fix1.md retained but not dispatched; flash-lane slot redirected to t84 (name tables)"
    },
    "evidence": [
     "scratch/t80/probe_snapshot_premise.py",
@@ -2795,7 +2795,7 @@
     "scratch/t77/out/verify_log.md",
     "scripts/t77_schema_v11.py"
    ],
-   "consequence": "public schema now carries all Wave-0/10 results; t87 (v11.1 E121 patch) cleared to run on next free devseek slot; merge-to-main decision documented for user review"
+   "consequence": "public schema now carries all Wave-0/10 results; t87 (v11.1 E121 patch) cleared to run on next free flash-lane slot; merge-to-main decision documented for user review"
   },
   {
    "id": "E123",
@@ -2956,7 +2956,7 @@
      "ledger": "E111–E128; accepted packages: t71 E111, t72 E112(partial), t73 E113, t75 E114, t74 E115, t78 E116, t76c E118, t80-negative E119, t76a E120, t82 E121, t77 E122, t87 E124, t84 E123, t81 E125, t83 E126, t85 E127",
      "schema": "v11.1 (club_main_row_L3 78; 13 non-main tables + 1034-occurrence denominator split out)",
      "key_milestones": "CBW*/CBD* 117-field family located (server table_45 STARTING_RECORD); five-table block (award/language/weather/derby/media) closed at L3 (152 fields) incl. media 20-step grammar and weather wind/precip E118 correction; t73 FK tool-gap closed (city Cnti); name-pool discovery (3 index tables + 3 person-token blobs, client==server); t9/t10 strict variable closures (13B header + 12B trailer + 9B footer framing)",
-     "lane_meta": "devseek walls at 40min produced 7 multi-attempt evolutions — recovery pattern: fresh session + deliver-first brief + isolated outbox; launcher heuristic false-DONE on stale outboxes 3 times (t81-fkvar/t81-fix1/t85-fix1) — future continuation lanes must use fresh outbox dirs"
+     "lane_meta": "flash-lane walls at 40min produced 7 multi-attempt evolutions — recovery pattern: fresh session + deliver-first brief + isolated outbox; launcher heuristic false-DONE on stale outboxes 3 times (t81-fkvar/t81-fix1/t85-fix1) — future continuation lanes must use fresh outbox dirs"
     },
     "pending_user_decision": "Phase 3 t02 targeted editor authorization (Top 20-30 dead slots + 10 existing L3 live read/write regression) — awaiting explicit user approval; t86 unified read-only library/CLI afterwards"
    },
@@ -2974,7 +2974,7 @@
    "author": "commander",
    "kind": "acceptance",
    "level": "L2",
-   "claim": "t90(devseek,attempt3)交付验收:schema v11.2 合并件+分母 v2 重桶。合入 reports/club_nation_subtable_schema.json(37→40 根节:新增 fk_index_e125/five_tables_l3_e126/table9_closure_e127,改 5 节,32 根节逐字节不动)与 reports/xml_denominator_coverage.json(1034 守恒;unresolved 277→160=15.5%;117 条 club.xml[211..327] 连续整体移入 re_routed_table_45,grade=L2_candidate)。weather R1/R2 改值 16×2 处、旧理由 why_before_E118 全保留、结构零改动。指挥官第三路径:根节 diff 独立重算、R1/R2 四点抽查、守恒与区间复算、基线哈希比对——全吻合。",
+   "claim": "t90(flash-lane,attempt3)交付验收:schema v11.2 合并件+分母 v2 重桶。合入 reports/club_nation_subtable_schema.json(37→40 根节:新增 fk_index_e125/five_tables_l3_e126/table9_closure_e127,改 5 节,32 根节逐字节不动)与 reports/xml_denominator_coverage.json(1034 守恒;unresolved 277→160=15.5%;117 条 club.xml[211..327] 连续整体移入 re_routed_table_45,grade=L2_candidate)。weather R1/R2 改值 16×2 处、旧理由 why_before_E118 全保留、结构零改动。指挥官第三路径:根节 diff 独立重算、R1/R2 四点抽查、守恒与区间复算、基线哈希比对——全吻合。",
    "evidence": [
     "scratch/t90/out/verify.py (35/35)",
     "scratch/t90/out/diff_inventory.json",
@@ -2995,11 +2995,11 @@
    "claim": "[NATION+0x108] 容器类型=NATION_T9(table_9)类,集合字段双路分发坐实:t9 读链裁决(t89 Phase 1,指挥官亲做)。链:t9 getter nation侧 va=0x141043d0f mov rcx,[r12+0x108] → call 0x1410668f0(t9_get_impl 入口,probe 首行吻合);setter va=0x141046276 → call 0x141063f30(t9_set_impl,4CC 0x5443736e);al=false 回落主行(jmp 0x140fe3f20 / call 0x140fe2700)。t75 gate 17048862 的边界比较体=va 0x141042f2a:[rax+0x4a0]=begin、[rax+0x4a8]=end、迭代基 +0x18——T9 对象内存布局。read/write 入口 0x14105d510/0x1410608f0。",
    "evidence": [
     "scratch/cmd/t89_phase1_verdict.json(7 处 VA/fo/字节三件套)",
-    "scratch/t89/probe_t9_{get_impl,set_impl,read,write,ctor,base_ctor}.txt(agy 前棒遗产 1.3MB)",
+    "scratch/t89/probe_t9_{get_impl,set_impl,read,write,ctor,base_ctor}.txt(neon-cli 前棒遗产 1.3MB)",
     "scratch/t83/out/REPORT.md L40-41(DATABASE 构造器 0xf026c0:+0x60=t9 NATION_T9 251,E126 L3)",
     "scratch/t75/out/xref_reverse.json(gate 17048862)"
    ],
-   "consequence": "E127 升级项的静态环闭合:集合字段 wire 家=table_9 由类型恒等+调用环双证。归因三重支撑:t83 E126 绑定 + t47 E87(t9 8-parent NATIONAL_TEAM_CONTAINER)+ 本调用环;探针簇 t9_* 标注系 agy 前棒遗留,其 vtable/RTTI 终封可由 t89b 文法工作中 per-code 分发与 nation escalation 槽位的对应性独立复核。遗留:条目字节网格(Phase 2)、held 回填(Phase 3)、双档对拍(Phase 4)→ t89b 车道(prompts/t89b_t9grammar.md,devseek)进行中;Phase 1 车道不再重做。"
+   "consequence": "E127 升级项的静态环闭合:集合字段 wire 家=table_9 由类型恒等+调用环双证。归因三重支撑:t83 E126 绑定 + t47 E87(t9 8-parent NATIONAL_TEAM_CONTAINER)+ 本调用环;探针簇 t9_* 标注系 neon-cli 前棒遗留,其 vtable/RTTI 终封可由 t89b 文法工作中 per-code 分发与 nation escalation 槽位的对应性独立复核。遗留:条目字节网格(Phase 2)、held 回填(Phase 3)、双档对拍(Phase 4)→ t89b 车道(prompts/t89b_t9grammar.md,flash-lane)进行中;Phase 1 车道不再重做。"
   },
   {
    "id": "E131",
@@ -3007,7 +3007,7 @@
    "author": "commander",
    "kind": "acceptance",
    "level": "L2",
-   "claim": "t91(devseek,attempt2)外源对照验收:github nottatdat/fm-data(d7a7150)与我们的 FM24 解码独立收敛。①码表:18 条可恢复外源码全部命中我们码表(0 缺失),7 条标签/表域漂移如实列列不改判(FM26≠FM24),natc↔nati 命名域冲突记录;②空日期探针:0x076c0001 在 server_21 六槽位命中率 78.93..100%(基线 25-35 倍),对照常量 0x076c0002/0x076c0000 全零,非 sentinel 行 (u16 doy,u16 year) 文法通过 95-100%——为既有 date4 sentinel 口径增加槽位级维度;③文法 H1-H8:H1/H2/H3/H7 独立收敛,H6=确定差异(FM24 8B 头 vs FM26 12B,负结果原文保留)。",
+   "claim": "t91(flash-lane,attempt2)外源对照验收:github nottatdat/fm-data(d7a7150)与我们的 FM24 解码独立收敛。①码表:18 条可恢复外源码全部命中我们码表(0 缺失),7 条标签/表域漂移如实列列不改判(FM26≠FM24),natc↔nati 命名域冲突记录;②空日期探针:0x076c0001 在 server_21 六槽位命中率 78.93..100%(基线 25-35 倍),对照常量 0x076c0002/0x076c0000 全零,非 sentinel 行 (u16 doy,u16 year) 文法通过 95-100%——为既有 date4 sentinel 口径增加槽位级维度;③文法 H1-H8:H1/H2/H3/H7 独立收敛,H6=确定差异(FM24 8B 头 vs FM26 12B,负结果原文保留)。",
    "evidence": [
     "scratch/t91/out/{code_coverage,nulldate_probe}.json",
     "scratch/t91/out/hypotheses.md",
@@ -3033,7 +3033,7 @@
     "scripts/t71_club100_cnst.py archives()",
     "scratch/ext/fm-data/docs/reports/agentC-summary-db.md(735216 锚)"
    ],
-   "consequence": "本仓首个外源锚定 wire 列(provenance=ext/fm-data@d7a7150,分级仍按本仓 L2)。residual 交 t88-fix5 窄化车道(per-4CC (type,offset) 映射,配 t82 tagmap);lane meta:fix4 又双墙+断流,大台账上下文+跨域推断是 devseek 死穴,指挥官接管数据侧+窄化简报是当前最优解。"
+   "consequence": "本仓首个外源锚定 wire 列(provenance=ext/fm-data@d7a7150,分级仍按本仓 L2)。residual 交 t88-fix5 窄化车道(per-4CC (type,offset) 映射,配 t82 tagmap);lane meta:fix4 又双墙+断流,大台账上下文+跨域推断是 flash-lane 死穴,指挥官接管数据侧+窄化简报是当前最优解。"
   },
   {
    "id": "E133",
@@ -3041,7 +3041,7 @@
    "author": "commander",
    "kind": "acceptance_partial",
    "level": "L2",
-   "claim": "t89c(devseek,attempt3 rc=124 截断,启发式提前判 DONE)按 partial 验收,指挥官补 REPORT/verify/DONE(E88 先例)。Phase 2 条目网格实质完成:载荷头 13B 解码(u32 count@+8,两档 251,与 table_45 84,477 同构);client 闭包 13+28,922+12×251+9=31,956 精确(tiling 行走达 payload_end-9);server 真值 307,564——纠正 E127 的 307,555(9 字节误差);ordinal lane 251/251;sentinel head 00 ff ff ff ff 251/251。Phase 3 部分:t9 分发全提取(52 get cases→70 字段:16 container_direct/24 helper/12 held/18 未分类),Cnti=[T9+0xc,+0x10]。",
+   "claim": "t89c(flash-lane,attempt3 rc=124 截断,启发式提前判 DONE)按 partial 验收,指挥官补 REPORT/verify/DONE(E88 先例)。Phase 2 条目网格实质完成:载荷头 13B 解码(u32 count@+8,两档 251,与 table_45 84,477 同构);client 闭包 13+28,922+12×251+9=31,956 精确(tiling 行走达 payload_end-9);server 真值 307,564——纠正 E127 的 307,555(9 字节误差);ordinal lane 251/251;sentinel head 00 ff ff ff ff 251/251。Phase 3 部分:t9 分发全提取(52 get cases→70 字段:16 container_direct/24 helper/12 held/18 未分类),Cnti=[T9+0xc,+0x10]。",
    "evidence": [
     "scratch/t89/out/{table9_grammar,_tile,_dual,field_map}.json",
     "scratch/t89/out/verify.py(指挥官写,V1-V6 七项过)",
@@ -3055,12 +3055,12 @@
    "author": "commander",
    "kind": "acceptance_partial",
    "level": "L2",
-   "claim": "t88-fix5(devseek,attempt1 40 分钟墙截断)按 partial 验收,指挥官补 REPORT/DONE。rec_structure 5 节全 done 并与 E132 冻结三列自洽:prefix 37B=u32@0(club-uid)+u8@4(37 型,按型变化)+u32@5(person-uid)+7×u32@9..33;bulk 资产 4 件(type_layout 186K/byte_profile 137K/slot_domains 104K/recget_tagmap)+tcget2_dispatch 一级骨架(80 4CC)。117 码 dispatch 覆盖 18/117(CBW*/CBD* 全缺,rec_type/inner_tag 未解)。",
+   "claim": "t88-fix5(flash-lane,attempt1 40 分钟墙截断)按 partial 验收,指挥官补 REPORT/DONE。rec_structure 5 节全 done 并与 E132 冻结三列自洽:prefix 37B=u32@0(club-uid)+u8@4(37 型,按型变化)+u32@5(person-uid)+7×u32@9..33;bulk 资产 4 件(type_layout 186K/byte_profile 137K/slot_domains 104K/recget_tagmap)+tcget2_dispatch 一级骨架(80 4CC)。117 码 dispatch 覆盖 18/117(CBW*/CBD* 全缺,rec_type/inner_tag 未解)。",
    "evidence": [
     "scratch/t88/out3/{rec_structure,tcget2_dispatch,type_layout,byte_profile,slot_domains,recget_tagmap}.json",
     "scratch/cmd/t88_rec_probe.json(E132)"
    ],
-   "consequence": "继承 E132 三列,rec 结构定稿级收敛;遗留=二级分发+117 码映射→fix6(装配棒)。车道 meta:发射器启发式再次在 rc=124 误判 DONE(连续第二次,E133 同款);40 分钟/attempt 是 devseek 实际有效预算,任务设计须 ≤1 attempt 装配量。"
+   "consequence": "继承 E132 三列,rec 结构定稿级收敛;遗留=二级分发+117 码映射→fix6(装配棒)。车道 meta:发射器启发式再次在 rc=124 误判 DONE(连续第二次,E133 同款);40 分钟/attempt 是 flash-lane 实际有效预算,任务设计须 ≤1 attempt 装配量。"
   },
   {
    "id": "E135",
@@ -3068,7 +3068,7 @@
    "author": "commander",
    "kind": "acceptance_partial",
    "level": "L2",
-   "claim": "t88-fix6(devseek,attempt1 rc=124 截断,车道自写 partial DONE——纪律习得)slots.json 装配:117 码全入账,34 L3(rec_type+reader_off+exe 链,如 CHSo rt=25 [rdi+0x30] dl=25)、3 L2、80 held。**关键负结果:CBW*/CBD* 主族 4CC 字节在 exe 分发中缺席**(cmp-immediate 无此码;原 t88 台账 TC_GET2_4cc.json 印证——CBDa/CBWa 仅在 lea 组=地址引用)→ 该族走 tag 表(inner_tag)路由而非 4CC 比较。",
+   "claim": "t88-fix6(flash-lane,attempt1 rc=124 截断,车道自写 partial DONE——纪律习得)slots.json 装配:117 码全入账,34 L3(rec_type+reader_off+exe 链,如 CHSo rt=25 [rdi+0x30] dl=25)、3 L2、80 held。**关键负结果:CBW*/CBD* 主族 4CC 字节在 exe 分发中缺席**(cmp-immediate 无此码;原 t88 台账 TC_GET2_4cc.json 印证——CBDa/CBWa 仅在 lea 组=地址引用)→ 该族走 tag 表(inner_tag)路由而非 4CC 比较。",
    "evidence": [
     "scratch/t88/out3/slots.json(117 码)",
     "scratch/t88/out3/tail_{cols,prof,ref,sig}.json(尾区 4 件)",
@@ -3083,7 +3083,7 @@
    "author": "commander",
    "kind": "correction",
    "level": "L1",
-   "claim": "两笔更正:①fix7 零产出(40 分钟墙,无新文件)——tag 路由区 devseek 三撞墙(fix2/4/7);②**fix6 的『CBW*/CBD* 4CC 缺席』负结果与 E121 矛盾**:t82 xref_extra3.negative_proof 记录 CBDa@0x11f0ca7/CBWa@0x11f0cb6 cmp 位点→hub 0x11f2a76→0x11e8af0→TC_RECORD_GET,且 VA 0x141b60190 全局表 type 0x2d=45。指挥官复验时命中 fo/rva 换算歧义(t89_disasm 硬编码 5 节表不覆盖 0x3ebad50 区;0x1411f0ca7 窗口见序列化代码非 cmp),复验未决,挂起。",
+   "claim": "两笔更正:①fix7 零产出(40 分钟墙,无新文件)——tag 路由区 flash-lane 三撞墙(fix2/4/7);②**fix6 的『CBW*/CBD* 4CC 缺席』负结果与 E121 矛盾**:t82 xref_extra3.negative_proof 记录 CBDa@0x11f0ca7/CBWa@0x11f0cb6 cmp 位点→hub 0x11f2a76→0x11e8af0→TC_RECORD_GET,且 VA 0x141b60190 全局表 type 0x2d=45。指挥官复验时命中 fo/rva 换算歧义(t89_disasm 硬编码 5 节表不覆盖 0x3ebad50 区;0x1411f0ca7 窗口见序列化代码非 cmp),复验未决,挂起。",
    "evidence": [
     "scratch/t82/out/xref_extra3.json(negative_proof_starting_record)",
     "scratch/t88/out3/slots.json(fix6 held 注记)",
@@ -3126,14 +3126,14 @@
    "author": "commander",
    "kind": "acceptance",
    "level": "L2",
-   "claim": "t92(devseek,attempt1 一次通过)schema v11.3 验收:43 根节(新增 table45_structure_e132_e138 / t9_grammar_e133 / cbw_route_e135_e137,改 5 节,35 根节未动)。E127 九字节修正落位(307,564+why_before);accessor_view_model(family_to_rec_type)在位;cbw_route 含 4CC 零存在负结果与 E121 引用降级;分母 v2 的 117 条 re_routed 加注记(1034 守恒,值不变)。指挥官第三路径:独立根节 diff+四点抽查全过。",
+   "claim": "t92(flash-lane,attempt1 一次通过)schema v11.3 验收:43 根节(新增 table45_structure_e132_e138 / t9_grammar_e133 / cbw_route_e135_e137,改 5 节,35 根节未动)。E127 九字节修正落位(307,564+why_before);accessor_view_model(family_to_rec_type)在位;cbw_route 含 4CC 零存在负结果与 E121 引用降级;分母 v2 的 117 条 re_routed 加注记(1034 守恒,值不变)。指挥官第三路径:独立根节 diff+四点抽查全过。",
    "evidence": [
     "scratch/t92/out/{schema_v113,denominator_note,diff_inventory}.json",
     "scratch/t92/out/verify.py(8/8)",
     "reports/club_nation_subtable_schema.json(v11.3 定稿)",
     "reports/xml_denominator_coverage.json(注记)"
    ],
-   "consequence": "schema v11.3 定稿;t88 链自 E121 起的叙事链(E132 探针→E134 结构→E135 slots→E136/E137 更正→E138 访问器模型)全部合入公共 schema。车道 meta:t92 首次 attempt1 内完成(rc=124 于收尾时才到,交付已落盘)——纯机械装配+冻结输入是 devseek 最稳形态。遗留(下波):suffix→列钉死、t89c helper 24 字段展开、Phase 3 t02 授权待决。"
+   "consequence": "schema v11.3 定稿;t88 链自 E121 起的叙事链(E132 探针→E134 结构→E135 slots→E136/E137 更正→E138 访问器模型)全部合入公共 schema。车道 meta:t92 首次 attempt1 内完成(rc=124 于收尾时才到,交付已落盘)——纯机械装配+冻结输入是 flash-lane 最稳形态。遗留(下波):suffix→列钉死、t89c helper 24 字段展开、Phase 3 t02 授权待决。"
   },
   {
    "id": "E140",

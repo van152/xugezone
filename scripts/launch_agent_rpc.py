@@ -1,11 +1,11 @@
-"""launch_zcode.py — Official ZCode Protocol (app-server stdio JSON-RPC) headless runner.
+"""launch_agent_rpc.py — Official AgentRpc Protocol (app-server stdio JSON-RPC) headless runner.
 
-Uses `node <ZCode>/resources/glm/zcode.cjs app-server` with explicit `modelSelection`
+Uses a locally configured Node app-server entrypoint with explicit `modelSelection`
 ({providerId, modelId}) so headless runs never depend on TUI/CLI default model state.
 
 Usage:
-  py -V:3.12 -B scripts/launch_zcode.py --selftest
-  py -V:3.12 -B scripts/launch_zcode.py --task t111 --prompt-file prompts/t111.md --outdir scratch/t111/out
+  py -V:3.12 -B scripts/launch_agent_rpc.py --selftest
+  py -V:3.12 -B scripts/launch_agent_rpc.py --task t111 --prompt-file prompts/t111.md --outdir scratch/t111/out
 Exit codes: 0 ok, 1 error/timeout, 2 bad usage.
 """
 from __future__ import annotations
@@ -24,17 +24,20 @@ import time
 from pathlib import Path
 
 ROOT = Path(str(_cfg.ROOT))
-ZCODE_DIR = Path(os.environ.get("LOCALAPPDATA", r"C:\Users\oak\AppData\Local")) / "Programs/ZCode/resources"
-ZCODE_CJS = ZCODE_DIR / "glm/zcode.cjs"
-BUILTIN_CFG = ZCODE_DIR / "config/provider/zcode-builtin.json"
 
 
-class ZCodeRpcClient:
+class AgentRpcRpcClient:
     def __init__(self, cwd: Path = ROOT, log_file: Path | None = None):
         env = os.environ.copy()
-        env["ZCODE_BUILTIN_PROVIDER_CONFIG_FILE"] = str(BUILTIN_CFG)
+        entrypoint = env.get("FMDB_RPC_ENTRYPOINT")
+        if not entrypoint:
+            raise RuntimeError("Set FMDB_RPC_ENTRYPOINT to your local app-server script")
+        config_key = env.get("FMDB_RPC_CONFIG_ENV")
+        config_path = env.get("FMDB_RPC_CONFIG_PATH")
+        if config_key and config_path:
+            env[config_key] = config_path
         self.proc = subprocess.Popen(
-            ["node", str(ZCODE_CJS), "app-server"],
+            ["node", entrypoint, "app-server"],
             cwd=str(cwd),
             env=env,
             stdin=subprocess.PIPE,
@@ -198,7 +201,7 @@ def run_prompt(
     timeout: float,
     log_file: Path | None = None,
 ) -> tuple[bool, str, str]:
-    cli = ZCodeRpcClient(cwd=cwd, log_file=log_file)
+    cli = AgentRpcRpcClient(cwd=cwd, log_file=log_file)
     try:
         model_sel = {"providerId": provider_id, "modelId": model_id}
         res = cli.call(
@@ -243,13 +246,14 @@ def run_prompt(
 
 def main() -> int:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    ap = argparse.ArgumentParser(description="Run ZCode headless agent via official app-server JSON-RPC.")
-    ap.add_argument("--task", default="zcode_task")
+    ap = argparse.ArgumentParser(description="Run AgentRpc headless agent via official app-server JSON-RPC.")
+    ap.add_argument("--task", default="agent_rpc_task")
     ap.add_argument("--prompt", default="")
     ap.add_argument("--prompt-file", type=Path, default=None)
     ap.add_argument("--outdir", type=Path, default=None)
     ap.add_argument("--cwd", type=Path, default=ROOT)
-    ap.add_argument("--provider", default="account:zai-start-plan")
+    ap.add_argument("--provider", default=os.environ.get("FMDB_RPC_PROVIDER"),
+                    required=not bool(os.environ.get("FMDB_RPC_PROVIDER")))
     ap.add_argument("--model", default="GLM-5.3-Flash")
     ap.add_argument("--mode", default="yolo", choices=["plan", "edit", "build", "yolo", "guarded"])
     ap.add_argument("--thought", default="max")
@@ -258,7 +262,7 @@ def main() -> int:
     args = ap.parse_args()
 
     if args.selftest:
-        log = ROOT / "scratch/t02/pi-logs/zcode_selftest.log"
+        log = ROOT / "scratch/t02/pi-logs/agent_rpc_selftest.log"
         log.parent.mkdir(parents=True, exist_ok=True)
         log.write_text("", encoding="utf-8")
         ok, sid, text = run_prompt(
@@ -286,7 +290,7 @@ def main() -> int:
         args.outdir.mkdir(parents=True, exist_ok=True)
         prompt += f"\n\n---\n## 本次任务参数\n- OUTDIR = {args.outdir}\n- 若目录已有中间进度则续作。完成后写 DONE.md（含 DONE type={args.task}）并打印交付清单与核心统计。\n"
 
-    log = ROOT / f"scratch/t02/pi-logs/{args.task}_zcode.log"
+    log = ROOT / f"scratch/t02/pi-logs/{args.task}_agent_rpc.log"
     log.parent.mkdir(parents=True, exist_ok=True)
     log.write_text("", encoding="utf-8")
 
@@ -300,7 +304,7 @@ def main() -> int:
         args.timeout,
         log,
     )
-    print(f"=== ZCODE {args.task} ok={ok} sid={sid} ===")
+    print(f"=== AGENT_RPC {args.task} ok={ok} sid={sid} ===")
     print(text[-2000:])
     return 0 if ok else 1
 

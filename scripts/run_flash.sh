@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# run_devseek.sh — fire a pi task on devseek with retry on upstream_saturated / 503.
-# usage: bash scripts/run_devseek.sh <task-name> <prompt-file> <outbox-dir> [max-retries]
+# run_flash.sh — fire a pi task on flash-lane with retry on upstream_saturated / 503.
+# usage: bash scripts/run_flash.sh <task-name> <prompt-file> <outbox-dir> [max-retries]
 set -u
 cd /d/tmp2b/fm24-db || exit 1
 
@@ -16,9 +16,9 @@ ATTEMPT_LOG="scratch/t02/pi-logs/${TASK}.attempt.log"
 for i in $(seq 1 "$MAX"); do
   echo "=== attempt $i/$MAX $(date) ===" >> "$LOG"
   : > "$ATTEMPT_LOG"
-  timeout 3600 pi --provider devseek --model deepseek-v4.1-flash-free \
+  timeout 3600 pi --provider "${FMDB_FLASH_PROVIDER:?Set FMDB_FLASH_PROVIDER}" --model "${FMDB_FLASH_MODEL:-deepseek-v4.1-flash}" \
       --thinking max --approve -p -n "$TASK" \
-      --session-dir scratch/t02/pi-sessions --session-id "${TASK}-devseek" \
+      --session-dir scratch/t02/pi-sessions --session-id "${TASK}-flash-lane" \
       -- "@${PROMPT}" "继续执行这份任务书（若上文已有进度请接着做，不要重头开始）。所有产物写到 ${OUTBOX}/。完成后打印清单：每个实体拿到几个字段、卡在哪。不要修改该目录之外的任何文件。" \
       >> "$ATTEMPT_LOG" 2>&1
   RC=$?

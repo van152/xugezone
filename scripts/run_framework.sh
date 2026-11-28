@@ -18,9 +18,9 @@ PROMPT="$(cat prompts/t02f_framework_only.md)
 
 for i in $(seq 1 "$MAX"); do
   echo "=== attempt $i/$MAX $(date) ===" >> "$LOG"; : > "$ATT"
-  timeout 900 pi --provider devseek --model deepseek-v4.1-flash-free \
+  timeout 900 pi --provider "${FMDB_FLASH_PROVIDER:?Set FMDB_FLASH_PROVIDER}" --model "${FMDB_FLASH_MODEL:-deepseek-v4.1-flash}" \
     --thinking max --approve -p -n "$TASK" \
-    --session-dir scratch/t02/pi-sessions --session-id "${TASK}-devseek" \
+    --session-dir scratch/t02/pi-sessions --session-id "${TASK}-flash-lane" \
     -p "$PROMPT" >> "$ATT" 2>&1
   RC=$?; cat "$ATT" >> "$LOG"
   if [ -s "$OUT/framework.json" ] && grep -q '"complete"' "$OUT/framework.json" 2>/dev/null; then

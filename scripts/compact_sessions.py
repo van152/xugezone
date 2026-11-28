@@ -18,26 +18,11 @@ PI = shutil.which("pi") or "pi"
 USE_SHELL = PI.lower().endswith((".cmd", ".bat"))
 
 # (session_dir, session_id, provider, model)
-SESSIONS = [
-    ("scratch/t01/pi-sessions", "t01d-devseek", None, None),      # dead/short, try devseek
-    ("scratch/t01/pi-sessions", "t01b-luna", "openai-codex", "gpt-6-luna"),
-    ("scratch/t01/pi-sessions", "t01a2-hiyo", "hiyo", "deepseek-v4.1-flash-1017"),
-    ("scratch/t01/pi-sessions", "t01f-sol", "openai-codex", "gpt-6.2-sol"),
-    ("scratch/t01/pi-sessions", "t01g-luna", "openai-codex", "gpt-6-luna"),
-    ("scratch/t01/pi-sessions", "t01h-luna", "openai-codex", "gpt-6-luna"),
-    ("scratch/t01/pi-sessions", "t01i-luna", "openai-codex", "gpt-6-luna"),
-    ("scratch/t01/pi-sessions", "t01j-luna", "openai-codex", "gpt-6-luna"),
-    ("scratch/t01/pi-sessions", "t01k-luna", "openai-codex", "gpt-6-luna"),
-    ("scratch/t01/pi-sessions", "t01l-luna", "openai-codex", "gpt-6-luna"),
-    ("scratch/t01/pi-sessions", "t01m-luna", "openai-codex", "gpt-6-luna"),
-    ("scratch/t02/pi-sessions", "t02a-devseek", "devseek", "deepseek-v4.1-flash-free"),
-    ("scratch/t02/pi-sessions", "s19-devseek", "devseek", "deepseek-v4.1-flash-free"),
-    ("scratch/t02/pi-sessions", "fw41-devseek", "devseek", "deepseek-v4.1-flash-free"),
-    ("scratch/t02/pi-sessions", "fw8-devseek", "devseek", "deepseek-v4.1-flash-free"),
-    ("scratch/t02/pi-sessions", "fw23-devseek", "devseek", "deepseek-v4.1-flash-free"),
-    ("scratch/t02/pi-sessions", "fw18-devseek", "devseek", "deepseek-v4.1-flash-free"),
-    ("scratch/t01/pi-sessions", "t01d-logfare", "logfare", "deepseek-v4.1-flash-1017"),
-]
+def load_sessions():
+    manifest = Path(os.environ.get("FMDB_SESSION_MANIFEST", str(ROOT / "scratch/session_manifest.json")))
+    if not manifest.is_file():
+        raise SystemExit("Set FMDB_SESSION_MANIFEST to a private JSON array of [session_dir, session_id, provider, model] records.")
+    return json.loads(manifest.read_text(encoding="utf-8"))
 
 
 def session_file(sdir: str, sid: str) -> Path | None:
@@ -109,7 +94,7 @@ def main():
     if "--only" in sys.argv:
         only = set(sys.argv[sys.argv.index("--only") + 1].split(","))
 
-    items = SESSIONS
+    items = load_sessions()
     if only:
         items = [s for s in items if s[1] in only]
     if limit:
